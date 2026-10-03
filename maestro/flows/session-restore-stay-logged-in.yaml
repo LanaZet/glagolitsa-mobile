@@ -1,0 +1,36 @@
+# Cold start keeps session (Mattermost / Element style).
+# Login once, relaunch WITHOUT clearState, assert still in «Чаты» — not kicked to login.
+#
+#   maestro test maestro/flows/session-restore-stay-logged-in.yaml \
+#     -e USERNAME=... -e PASSWORD=...
+appId: com.glagolitsa.mobile
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "Glagolitsa"
+    timeout: 30000
+- tapOn:
+    text: "Войти как ${USERNAME}"
+    optional: true
+- runFlow:
+    when:
+      notVisible: "Чаты"
+    commands:
+      - tapOn: "Логин"
+      - inputText: ${USERNAME}
+      - tapOn: "Пароль"
+      - inputText: ${PASSWORD}
+      - hideKeyboard
+      - tapOn: "Войти"
+- extendedWaitUntil:
+    visible: "Чаты"
+    timeout: 90000
+# Process death / warm restart: credentials + local DB must restore session.
+- launchApp:
+    clearState: false
+- extendedWaitUntil:
+    visible: "Чаты"
+    timeout: 90000
+- assertVisible: "Чаты"
+- assertNotVisible: "Войти"

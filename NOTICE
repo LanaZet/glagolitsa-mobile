@@ -1,0 +1,44 @@
+Glagolitsa
+Copyright (c) 2026-present Svetlana Zavatskaia. All Rights Reserved.
+
+Required Notice:
+  Glagolitsa
+  Copyright (c) 2026-present Svetlana Zavatskaia
+  https://github.com/LanaZet/glagolitsa-mobile
+
+This product is licensed under the Glagolitsa Source Available License.
+See LICENSE for the full terms.
+
+Non-commercial use is permitted with attribution to Svetlana Zavatskaia.
+Commercial use requires a separate written license from the copyright holder.
+
+This product includes software developed by Svetlana Zavatskaia
+and Glagolitsa contributors.
+
+Third-party open source components are used under their respective licenses
+as declared by package managers (Gradle / Go modules / CocoaPods). Their
+licenses are not modified by the Glagolitsa Source Available License on
+original Glagolitsa source files.
+
+Important binary distribution notice:
+  Android and iOS builds currently use libsignal 0.96.4:
+    - Gradle: org.signal:libsignal-android / org.signal:libsignal-client
+    - CocoaPods: LibSignalClient from https://github.com/signalapp/libsignal.git
+      tag v0.96.4
+
+  libsignal is licensed under GNU AGPL-3.0. Do not distribute APK, IPA,
+  desktop, or other binary builds that include libsignal as a product solely
+  under the Glagolitsa Source Available License. Such builds must comply with
+  the libsignal/AGPL terms, use a compatible licensing arrangement, remove or
+  replace libsignal, or rely on a separate permission from the libsignal
+  copyright holder.
+
+Bundled font:
+  Philosopher Regular and Philosopher Bold are licensed under the SIL Open
+  Font License, Version 1.1. See:
+    shared/src/commonMain/composeResources/font/OFL.txt
+
+Documentation may reference design patterns from public products (e.g.
+Telegram, Discord, Slack, Mattermost, Matrix, Signal) for educational and
+architectural comparison. Those names and trademarks remain the property of
+their respective owners. No affiliation or endorsement is implied.

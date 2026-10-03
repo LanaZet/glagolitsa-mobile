@@ -1,0 +1,31 @@
+# Открыть DM с собеседником (без logout / clearState).
+appId: com.glagolitsa.mobile
+---
+- launchApp:
+    clearState: false
+- extendedWaitUntil:
+    visible: "Чаты"
+    timeout: 30000
+- tapOn: "Личные"
+- tapOn:
+    text: "Открыть чат ${PARTNER_USERNAME}"
+    optional: true
+- runFlow:
+    when:
+      notVisible:
+        id: "chat-compose"
+    commands:
+      - tapOn: "Поиск чатов и людей"
+      - inputText: ${PARTNER_USERNAME}
+      - hideKeyboard
+      - extendedWaitUntil:
+          visible: "Написать @${PARTNER_USERNAME}"
+          timeout: 20000
+      - tapOn: "Написать @${PARTNER_USERNAME}"
+- extendedWaitUntil:
+    visible:
+      id: "chat-compose"
+    timeout: 20000
+- tapOn:
+    text: "Принять"
+    optional: true

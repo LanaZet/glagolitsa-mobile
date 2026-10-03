@@ -1,0 +1,45 @@
+#!/usr/bin/env bash
+
+# Copyright (c) 2026-present Glagolitsa contributors. All Rights Reserved.
+# See LICENSE for license information.
+
+# Auto-add license headers to staged source files before commit.
+# Enable: git config core.hooksPath .githooks
+# Or:     ./scripts/install-git-hooks.sh
+set -euo pipefail
+
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null)" || exit 0
+cd "$ROOT"
+
+SCRIPT="$ROOT/scripts/add-license-headers.sh"
+[[ -x "$SCRIPT" ]] || chmod +x "$SCRIPT" 2>/dev/null || true
+[[ -f "$SCRIPT" ]] || exit 0
+
+# Staged added/changed source files only.
+mapfile_fallback() {
+  git diff --cached --name-only --diff-filter=ACM -z | tr '\0' '\n'
+}
+
+FILES=()
+while IFS= read -r f; do
+  [[ -z "$f" ]] && continue
+  case "$f" in
+    *.kt|*.kts|*.go|*.sh|*.sq|*.sqm|*.sql) FILES+=("$f") ;;
+  esac
+done < <(mapfile_fallback)
+
+if [[ ${#FILES[@]} -eq 0 ]]; then
+  exit 0
+fi
+
+# Apply headers (no-op if already present).
+"$SCRIPT" "${FILES[@]}"
+
+# Re-stage any files the script rewrote.
+for f in "${FILES[@]}"; do
+  if [[ -f "$f" ]]; then
+    git add -- "$f"
+  fi
+done
+
+exit 0

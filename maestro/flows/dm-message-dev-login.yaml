@@ -1,0 +1,24 @@
+# Dev shortcut login (без clearState).
+appId: com.glagolitsa.mobile
+---
+- launchApp:
+    clearState: false
+- extendedWaitUntil:
+    visible: "Glagolitsa"
+    timeout: 30000
+- tapOn:
+    text: "Войти как ${USERNAME}"
+    optional: true
+- runFlow:
+    when:
+      notVisible: "Чаты"
+    commands:
+      - tapOn: "Логин"
+      - inputText: ${USERNAME}
+      - tapOn: "Пароль"
+      - inputText: ${PASSWORD}
+      - hideKeyboard
+      - tapOn: "Войти"
+- extendedWaitUntil:
+    visible: "Чаты"
+    timeout: 60000

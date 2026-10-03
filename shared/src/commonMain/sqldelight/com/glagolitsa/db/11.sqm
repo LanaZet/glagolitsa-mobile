@@ -1,0 +1,7 @@
+-- Copyright (c) 2026-present Glagolitsa contributors. All Rights Reserved.
+-- See LICENSE for license information.
+
+ALTER TABLE chats ADD COLUMN description TEXT;
+ALTER TABLE chats ADD COLUMN visibility TEXT;
+ALTER TABLE chats ADD COLUMN slug TEXT;
+ALTER TABLE chats ADD COLUMN encryption TEXT;

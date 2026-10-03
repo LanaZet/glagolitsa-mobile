@@ -1,0 +1,68 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Glagolitsa: Собрать APK для тестеров",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "./scripts/build-prerelease-apk.sh",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Glagolitsa: Собрать APK и установить на телефон",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "./scripts/build-prerelease-apk.sh --install --no-dev-shortcuts",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Glagolitsa: Опубликовать APK-обновление на сервер",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "./scripts/publish-android-update.sh",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Glagolitsa: Сунь Укун (эмулятор: local/public)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "./scripts/rebuild-emulator.sh --test-build --interactive --reinstall --watch",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Glagolitsa: iOS Simulator (сервер + install)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "./scripts/run-and-debug.sh --ios",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Glagolitsa: iOS Simulator (только app, API уже поднят)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "./scripts/run-and-debug.sh --ios --app-only",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Glagolitsa: Android + iOS (общий local API)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "./scripts/run-and-debug.sh --both",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Glagolitsa: Stop All",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "./scripts/stop-all.sh",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Glagolitsa: Stop All (оставить iOS Simulator UI)",
+      "type": "node-terminal",
+      "request": "launch",
+      "command": "./scripts/stop-all.sh --keep-ios-sim",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

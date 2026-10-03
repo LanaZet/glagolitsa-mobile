@@ -1,0 +1,26 @@
+# Отправка в уже открытый чат (без clearState / logout).
+appId: com.glagolitsa.mobile
+---
+- launchApp:
+    clearState: false
+- extendedWaitUntil:
+    visible:
+      id: "chat-compose"
+    timeout: 15000
+- tapOn:
+    id: "chat-message-input"
+- inputText: ${E2E_MSG}
+- hideKeyboard
+- tapOn:
+    id: "chat-send"
+- extendedWaitUntil:
+    visible: ${E2E_MSG}
+    timeout: 20000
+- assertVisible:
+    id: "chat-messages"
+- assertVisible: ${E2E_MSG}
+- extendedWaitUntil:
+    notVisible: "◷"
+    timeout: 10000
+- assertVisible:
+    id: "chat-message-status-delivered"

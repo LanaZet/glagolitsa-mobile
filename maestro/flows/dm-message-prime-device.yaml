@@ -1,0 +1,27 @@
+# Регистрация device у получателя перед send (нужны prekeys для encrypt).
+appId: com.glagolitsa.mobile
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "Вход"
+    timeout: 15000
+- tapOn: "Логин"
+- inputText: ${RECIPIENT_USERNAME}
+- tapOn: "Пароль"
+- inputText: ${RECIPIENT_PASSWORD}
+- hideKeyboard
+- tapOn: "Войти"
+- extendedWaitUntil:
+    visible: "Чаты"
+    timeout: 90000
+- tapOn: "Настройки"
+- scrollUntilVisible:
+    element:
+      text: "Выйти из аккаунта"
+    direction: DOWN
+    timeout: 10000
+- tapOn: "Выйти из аккаунта"
+- extendedWaitUntil:
+    visible: "Вход"
+    timeout: 15000

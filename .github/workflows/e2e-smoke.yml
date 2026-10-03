@@ -1,0 +1,32 @@
+name: E2E smoke
+
+on:
+  workflow_dispatch:
+    inputs:
+      profile:
+        description: "Smoke profile: release, auth, or delivery"
+        required: false
+        default: release
+  schedule:
+    - cron: "0 1 * * *"
+  release:
+    types:
+      - published
+
+jobs:
+  maestro-smoke:
+    name: Maestro release/nightly smoke
+    runs-on:
+      - self-hosted
+      - macOS
+      - android
+    timeout-minutes: 90
+    env:
+      E2E_SMOKE_PROFILE: ${{ github.event.inputs.profile || 'release' }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Run E2E smoke
+        run: ./scripts/run-e2e-smoke.sh "$E2E_SMOKE_PROFILE"

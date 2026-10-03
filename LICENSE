@@ -1,0 +1,120 @@
+Glagolitsa Source Available License
+Copyright (c) 2026-present Svetlana Zavatskaia. All Rights Reserved.
+
+Кратко (не является юридически обязывающим текстом / for convenience only):
+  Исходный код доступен. Некоммерческое использование, изучение,
+  изменение и запуск разрешены при сохранении ссылки на автора.
+  Коммерческое использование требует отдельного письменного разрешения.
+  Это source-available лицензия, а не OSI open source (MIT/Apache/GPL).
+
+==============================================================================
+
+The Glagolitsa Source Available License (the "License")
+Copyright (c) 2026-present Svetlana Zavatskaia (the "Licensor").
+
+With regard to this software and associated documentation files
+(the "Software"):
+
+1. Non-commercial use
+
+You may use, copy, modify, compile, run, and study the Software free of
+charge for non-commercial purposes, including personal, educational,
+research, hobby, amateur, and charitable use.
+
+You may also copy and modify the Software for development, evaluation,
+and testing, including inside a commercial organization, without a
+separate commercial license. Running the Software in production for a
+commercial purpose is not covered by this section.
+
+2. Attribution (required)
+
+Any use, copy, modification, or distribution of the Software must:
+
+  (a) keep this License and all copyright, license, and attribution
+      notices in source files and in NOTICE;
+
+  (b) include this License with every copy or substantial portion of
+      the Software; and
+
+  (c) give clear credit to the original author. At minimum:
+
+        Glagolitsa
+        Copyright (c) 2026-present Svetlana Zavatskaia
+        https://github.com/LanaZet/glagolitsa-mobile
+
+      If you distribute a binary, hosted service, documentation site,
+      or other user-facing product based on the Software, this credit
+      must appear in an About, Credits, License, or equivalent screen
+      (or in accompanying documentation if there is no UI).
+
+You may not remove, obscure, or misrepresent authorship. You may add
+your own copyright for your modifications, but not in a way that
+suggests the original Software is yours.
+
+3. Modification and distribution
+
+You may modify the Software and share patches or forks for
+non-commercial purposes.
+
+Any copy or derivative that you distribute must remain under this
+License. You are not granted the right to relicense the Software or
+your modifications of it under different terms.
+
+The Licensor retains all right, title, and interest in and to the
+original Software. Your modifications remain yours, except that they
+may only be used, copied, modified, displayed, distributed, or
+otherwise exploited under this License or a separate written license
+from the Licensor.
+
+4. Commercial use
+
+Use of the Software for a commercial purpose requires a separate
+written license from the Licensor.
+
+"Commercial purpose" includes, without limitation:
+
+  - selling the Software or a product that includes it;
+  - offering the Software as a paid or hosted service;
+  - using the Software in production to operate a for-profit
+    business, product, or paid service;
+  - any use primarily intended for commercial advantage or
+    monetary compensation.
+
+To request a commercial license, contact the Licensor via GitHub:
+https://github.com/LanaZet
+
+5. No other rights
+
+You are not granted any rights beyond what is expressly stated here.
+It is forbidden to copy, merge, publish, distribute, sublicense, or
+sell the Software except as permitted by this License or a separate
+written agreement with the Licensor.
+
+This License does not grant trademark rights in "Glagolitsa" or
+related names, logos, or branding, except as needed for the
+attribution required above.
+
+6. Third-party components
+
+Third-party components bundled with or used by the Software remain
+under their original licenses. Those licenses are not modified by
+this License. See NOTICE and dependency manifests
+(gradle/libs.versions.toml, go.mod, and similar).
+
+7. Disclaimer
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+==============================================================================
+
+This License is inspired by the Mattermost Source Available License
+in structure (source available; limited grant; production/commercial
+use reserved), but the terms above are specific to Glagolitsa and
+are not Mattermost terms. Mattermost is a trademark of Mattermost, Inc.

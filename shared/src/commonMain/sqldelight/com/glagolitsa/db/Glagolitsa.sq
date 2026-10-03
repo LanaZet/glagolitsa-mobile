@@ -1,0 +1,469 @@
+-- Copyright (c) 2026-present Glagolitsa contributors. All Rights Reserved.
+-- See LICENSE for license information.
+
+CREATE TABLE app_session (
+    id INTEGER NOT NULL PRIMARY KEY CHECK (id = 1),
+    token TEXT NOT NULL,
+    user_id TEXT NOT NULL,
+    username TEXT NOT NULL,
+    display_name TEXT,
+    status TEXT,
+    bio TEXT,
+    avatar_url TEXT,
+    presence TEXT,
+    nickname TEXT,
+    position TEXT
+);
+
+CREATE TABLE chats (
+    id TEXT NOT NULL PRIMARY KEY,
+    title TEXT NOT NULL,
+    type TEXT NOT NULL,
+    last_message TEXT,
+    last_message_at TEXT,
+    created_at TEXT,
+    description TEXT,
+    visibility TEXT,
+    slug TEXT,
+    encryption TEXT,
+    creator_id TEXT,
+    avatar_url TEXT
+);
+
+CREATE TABLE messages (
+    id TEXT NOT NULL PRIMARY KEY,
+    chat_id TEXT NOT NULL,
+    sender_id TEXT NOT NULL,
+    body TEXT NOT NULL,
+    pending_id TEXT,
+    status TEXT NOT NULL DEFAULT 'sent',
+    created_at TEXT,
+    reply_to_message_id TEXT,
+    reply_preview_sender_id TEXT,
+    reply_preview_body TEXT,
+    thread_root_id TEXT,
+    thread_parent_id TEXT,
+    visibility TEXT NOT NULL DEFAULT 'main',
+    thread_reply_count INTEGER NOT NULL DEFAULT 0,
+    last_thread_reply_at TEXT,
+    last_thread_reply_sender_id TEXT,
+    expires_at TEXT,
+    envelope_type INTEGER,
+    ciphertext TEXT,
+    sender_device_id TEXT,
+    FOREIGN KEY(chat_id) REFERENCES chats(id)
+);
+
+CREATE INDEX messages_chat_id ON messages(chat_id);
+CREATE INDEX messages_chat_visibility_created_at ON messages(chat_id, visibility, created_at);
+CREATE INDEX messages_thread_root_created_at ON messages(thread_root_id, created_at);
+CREATE INDEX messages_expires_at ON messages(expires_at);
+
+CREATE TABLE app_settings (
+    setting_key TEXT NOT NULL PRIMARY KEY,
+    setting_value TEXT NOT NULL
+);
+
+CREATE TABLE outbox_jobs (
+    id TEXT NOT NULL PRIMARY KEY,
+    job_type TEXT NOT NULL,
+    chat_id TEXT NOT NULL,
+    payload_json TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'pending',
+    attempts INTEGER NOT NULL DEFAULT 0,
+    next_attempt_at TEXT,
+    created_at TEXT NOT NULL,
+    last_error TEXT
+);
+
+CREATE INDEX outbox_jobs_status_next_attempt ON outbox_jobs(status, next_attempt_at);
+
+CREATE TABLE local_attachments (
+    cache_id TEXT NOT NULL PRIMARY KEY,
+    attachment_id TEXT,
+    message_id TEXT,
+    chat_id TEXT NOT NULL,
+    owner_account_id TEXT NOT NULL,
+    direction TEXT NOT NULL,
+    kind TEXT,
+    mime_type TEXT,
+    file_name TEXT,
+    width INTEGER,
+    height INTEGER,
+    duration_ms INTEGER,
+    waveform TEXT,
+    encrypted_path TEXT,
+    thumbnail_path TEXT,
+    thumbnail_key TEXT,
+    thumbnail_size INTEGER NOT NULL DEFAULT 0,
+    encrypted_size INTEGER NOT NULL DEFAULT 0,
+    plaintext_size INTEGER NOT NULL DEFAULT 0,
+    state TEXT NOT NULL,
+    last_accessed_at TEXT,
+    created_at TEXT NOT NULL,
+    expires_at TEXT,
+    error TEXT
+);
+
+CREATE INDEX local_attachments_attachment_id ON local_attachments(attachment_id);
+CREATE INDEX local_attachments_message_id ON local_attachments(message_id);
+CREATE INDEX local_attachments_chat_id ON local_attachments(chat_id);
+CREATE INDEX local_attachments_state ON local_attachments(state);
+CREATE INDEX local_attachments_trim ON local_attachments(last_accessed_at, created_at);
+
+selectChats:
+SELECT * FROM chats
+ORDER BY COALESCE(last_message_at, created_at) DESC;
+
+selectChatById:
+SELECT * FROM chats WHERE id = ?;
+
+insertChat:
+INSERT OR REPLACE INTO chats(
+  id, title, type, last_message, last_message_at, created_at,
+  description, visibility, slug, encryption, creator_id, avatar_url
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+selectMessagesForChat:
+SELECT * FROM messages
+WHERE chat_id = ?
+ORDER BY
+  CASE WHEN created_at IS NULL OR created_at = '' THEN 1 ELSE 0 END ASC,
+  created_at ASC,
+  id ASC;
+
+selectAllMessages:
+SELECT * FROM messages
+ORDER BY
+  CASE WHEN created_at IS NULL OR created_at = '' THEN 1 ELSE 0 END ASC,
+  created_at ASC,
+  id ASC;
+
+countMessages:
+SELECT COUNT(*) FROM messages;
+
+selectMainMessagesForChat:
+SELECT * FROM messages
+WHERE chat_id = ?
+  AND visibility != 'thread_only'
+ORDER BY
+  CASE WHEN created_at IS NULL OR created_at = '' THEN 1 ELSE 0 END ASC,
+  created_at ASC,
+  id ASC;
+
+selectThreadMessagesForChat:
+SELECT * FROM messages
+WHERE chat_id = ?
+  AND thread_root_id = ?
+ORDER BY
+  CASE WHEN created_at IS NULL OR created_at = '' THEN 1 ELSE 0 END ASC,
+  created_at ASC,
+  id ASC;
+
+selectThreadBranchMessagesForChat:
+SELECT * FROM messages
+WHERE chat_id = ?
+  AND visibility = 'thread_only'
+  AND thread_root_id IS NOT NULL
+  AND thread_root_id != ''
+  AND id != thread_root_id
+ORDER BY
+  CASE WHEN created_at IS NULL OR created_at = '' THEN 1 ELSE 0 END ASC,
+  created_at ASC,
+  id ASC;
+
+insertMessage:
+INSERT OR REPLACE INTO messages(
+  id, chat_id, sender_id, body, pending_id, status, created_at,
+  reply_to_message_id, reply_preview_sender_id, reply_preview_body,
+  thread_root_id, thread_parent_id, visibility,
+  thread_reply_count, last_thread_reply_at, last_thread_reply_sender_id, expires_at,
+  envelope_type, ciphertext, sender_device_id
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+deleteExpiredMessages:
+DELETE FROM messages
+WHERE expires_at IS NOT NULL
+  AND expires_at != ''
+  AND expires_at < ?;
+
+deleteMessagesForChat:
+DELETE FROM messages WHERE chat_id = ?;
+
+deleteChatById:
+DELETE FROM chats WHERE id = ?;
+
+deleteMessageById:
+DELETE FROM messages WHERE id = ?;
+
+clearMessages:
+DELETE FROM messages;
+
+clearChats:
+DELETE FROM chats;
+
+selectSession:
+SELECT * FROM app_session WHERE id = 1;
+
+upsertSession:
+INSERT OR REPLACE INTO app_session(
+    id, token, user_id, username, display_name, status, bio,
+    avatar_url, presence, nickname, position
+)
+VALUES (1, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+clearSession:
+DELETE FROM app_session;
+
+clearSettings:
+DELETE FROM app_settings;
+
+updateChatPreview:
+UPDATE chats
+SET last_message = ?, last_message_at = ?
+WHERE id = ?;
+
+selectSetting:
+SELECT setting_value FROM app_settings WHERE setting_key = ?;
+
+selectSettingsByPrefix:
+SELECT setting_key, setting_value FROM app_settings WHERE setting_key LIKE ?;
+
+upsertSetting:
+INSERT OR REPLACE INTO app_settings(setting_key, setting_value)
+VALUES (?, ?);
+
+selectMessageById:
+SELECT * FROM messages WHERE id = ?;
+
+selectMessageByPendingId:
+SELECT * FROM messages WHERE pending_id = ?
+ORDER BY
+  CASE WHEN created_at IS NULL OR created_at = '' THEN 1 ELSE 0 END ASC,
+  created_at DESC,
+  id DESC
+LIMIT 1;
+
+selectMessagesByPendingIdForSender:
+SELECT * FROM messages
+WHERE chat_id = ?
+  AND sender_id = ?
+  AND pending_id = ?;
+
+updateMessageStatus:
+UPDATE messages SET status = ? WHERE id = ?;
+
+updateMessageStatusByPendingId:
+UPDATE messages
+SET status = ?
+WHERE chat_id = ?
+  AND sender_id = ?
+  AND pending_id = ?;
+
+deleteMessagesByPendingIdExcept:
+DELETE FROM messages
+WHERE pending_id = ?
+  AND chat_id = ?
+  AND sender_id = ?
+  AND id != ?;
+
+refreshThreadSummaryFromLocalReplies:
+UPDATE messages
+SET thread_reply_count = MAX(
+        thread_reply_count,
+        (
+          SELECT COUNT(*)
+          FROM messages AS replies
+          WHERE replies.chat_id = messages.chat_id
+            AND replies.visibility = 'thread_only'
+            AND replies.thread_root_id = messages.id
+            AND replies.id != messages.id
+        )
+    ),
+    last_thread_reply_at = COALESCE(
+        (
+          SELECT replies.created_at
+          FROM messages AS replies
+          WHERE replies.chat_id = messages.chat_id
+            AND replies.visibility = 'thread_only'
+            AND replies.thread_root_id = messages.id
+            AND replies.id != messages.id
+          ORDER BY
+            CASE WHEN replies.created_at IS NULL OR replies.created_at = '' THEN 1 ELSE 0 END ASC,
+            replies.created_at DESC,
+            replies.id DESC
+          LIMIT 1
+        ),
+        last_thread_reply_at
+    ),
+    last_thread_reply_sender_id = COALESCE(
+        (
+          SELECT replies.sender_id
+          FROM messages AS replies
+          WHERE replies.chat_id = messages.chat_id
+            AND replies.visibility = 'thread_only'
+            AND replies.thread_root_id = messages.id
+            AND replies.id != messages.id
+          ORDER BY
+            CASE WHEN replies.created_at IS NULL OR replies.created_at = '' THEN 1 ELSE 0 END ASC,
+            replies.created_at DESC,
+            replies.id DESC
+          LIMIT 1
+        ),
+        last_thread_reply_sender_id
+    )
+WHERE id = ?;
+
+selectDueOutboxJobs:
+SELECT * FROM outbox_jobs
+WHERE status = 'pending'
+  AND (next_attempt_at IS NULL OR next_attempt_at = '' OR next_attempt_at <= ?)
+ORDER BY created_at ASC
+LIMIT ?;
+
+resetRecoverableOutboxBackoff:
+UPDATE outbox_jobs
+SET status = 'pending',
+    next_attempt_at = NULL
+WHERE status = 'processing'
+   OR (
+     status = 'pending'
+     AND last_error IN ('No user', 'No encrypted envelopes produced', 'Partner has no registered devices')
+   );
+
+insertOutboxJob:
+INSERT OR REPLACE INTO outbox_jobs(
+  id, job_type, chat_id, payload_json, status, attempts, next_attempt_at, created_at, last_error
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+updateOutboxJob:
+UPDATE outbox_jobs
+SET status = ?, attempts = ?, next_attempt_at = ?, last_error = ?
+WHERE id = ?;
+
+deleteOutboxJob:
+DELETE FROM outbox_jobs WHERE id = ?;
+
+clearOutboxJobs:
+DELETE FROM outbox_jobs;
+
+countPendingOutboxJobs:
+SELECT COUNT(*) FROM outbox_jobs WHERE status IN ('pending', 'processing');
+
+selectOutboxJobById:
+SELECT * FROM outbox_jobs WHERE id = ?;
+
+selectOutboxJobsForChat:
+SELECT * FROM outbox_jobs
+WHERE chat_id = ?
+  AND status IN ('pending', 'processing');
+
+upsertLocalAttachment:
+INSERT OR REPLACE INTO local_attachments(
+  cache_id, attachment_id, message_id, chat_id, owner_account_id, direction,
+  kind, mime_type, file_name, width, height, duration_ms, waveform,
+  encrypted_path, thumbnail_path, thumbnail_key,
+  thumbnail_size, encrypted_size, plaintext_size, state, last_accessed_at,
+  created_at, expires_at, error
+)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+
+selectLocalAttachment:
+SELECT * FROM local_attachments WHERE cache_id = ?;
+
+selectLocalAttachmentByAttachmentId:
+SELECT * FROM local_attachments
+WHERE attachment_id = ?
+ORDER BY
+  CASE WHEN last_accessed_at IS NULL OR last_accessed_at = '' THEN 1 ELSE 0 END ASC,
+  last_accessed_at DESC,
+  created_at DESC
+LIMIT 1;
+
+selectLocalAttachmentsForChat:
+SELECT * FROM local_attachments WHERE chat_id = ? ORDER BY created_at DESC;
+
+selectAllLocalAttachments:
+SELECT * FROM local_attachments ORDER BY created_at DESC;
+
+updateLocalAttachmentState:
+UPDATE local_attachments
+SET state = ?, error = ?, last_accessed_at = ?
+WHERE cache_id = ?;
+
+updateLocalAttachmentRemoteId:
+UPDATE local_attachments
+SET attachment_id = ?, state = ?, last_accessed_at = ?
+WHERE cache_id = ?;
+
+updateLocalAttachmentMessageId:
+UPDATE local_attachments
+SET message_id = ?, last_accessed_at = ?
+WHERE cache_id = ?;
+
+relinkLocalAttachmentMessageId:
+UPDATE local_attachments
+SET message_id = ?, last_accessed_at = ?
+WHERE message_id = ?;
+
+repairLocalAttachmentMessageLinksForChat:
+UPDATE local_attachments
+SET
+  message_id = (
+    SELECT m.id
+    FROM messages m
+    WHERE m.chat_id = ? AND m.pending_id = local_attachments.message_id
+    ORDER BY
+      CASE WHEN m.created_at IS NULL OR m.created_at = '' THEN 1 ELSE 0 END ASC,
+      m.created_at DESC,
+      m.id DESC
+    LIMIT 1
+  ),
+  last_accessed_at = ?
+WHERE chat_id = ?
+  AND message_id IS NOT NULL
+  AND message_id != ''
+  AND EXISTS (
+    SELECT 1
+    FROM messages m
+    WHERE m.chat_id = ? AND m.pending_id = local_attachments.message_id
+  );
+
+updateLocalAttachmentThumbnail:
+UPDATE local_attachments
+SET thumbnail_path = ?, thumbnail_key = ?, thumbnail_size = ?, last_accessed_at = ?
+WHERE cache_id = ?;
+
+touchLocalAttachment:
+UPDATE local_attachments
+SET last_accessed_at = ?
+WHERE cache_id = ?;
+
+deleteLocalAttachment:
+DELETE FROM local_attachments WHERE cache_id = ?;
+
+deleteLocalAttachmentsForChat:
+DELETE FROM local_attachments WHERE chat_id = ?;
+
+clearLocalAttachments:
+DELETE FROM local_attachments;
+
+selectLocalAttachmentTrimCandidates:
+SELECT * FROM local_attachments
+WHERE state != 'pinned'
+ORDER BY
+  CASE WHEN last_accessed_at IS NULL OR last_accessed_at = '' THEN created_at ELSE last_accessed_at END ASC,
+  created_at ASC
+LIMIT ?;
+
+selectExpiredLocalAttachments:
+SELECT * FROM local_attachments
+WHERE expires_at IS NOT NULL
+  AND expires_at != ''
+  AND expires_at < ?;
+
+sumLocalAttachmentBytes:
+SELECT COALESCE(SUM(encrypted_size + thumbnail_size), 0) FROM local_attachments;

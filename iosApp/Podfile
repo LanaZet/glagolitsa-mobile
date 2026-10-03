@@ -1,0 +1,26 @@
+platform :ios, '17.2'
+install! 'cocoapods', :deterministic_uuids => false
+
+ENV['LIBSIGNAL_FFI_PREBUILD_CHECKSUM'] ||= 'afac333d0ee6dd86786316bb8346d8dd61ca153afb5080362a35553a701efa4f'
+
+target 'iosApp' do
+  use_frameworks! :linkage => :static
+  pod 'LibSignalClient', :git => 'https://github.com/signalapp/libsignal.git', :tag => 'v0.96.4'
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '17.2'
+      config.build_settings['SWIFT_ENABLE_EXPLICIT_MODULES'] = 'NO'
+      config.build_settings['ENABLE_USER_SCRIPT_SANDBOXING'] = 'NO'
+    end
+  end
+  installer.aggregate_targets.each do |target|
+    target.user_project.native_targets.each do |native|
+      native.build_configurations.each do |config|
+        config.build_settings['SWIFT_ENABLE_EXPLICIT_MODULES'] = 'NO'
+      end
+    end
+  end
+end

@@ -1,0 +1,10 @@
+bin/
+dist/
+*.exe
+*.test
+*.out
+# RTC generated secrets (never commit)
+deploy/rtc/livekit.generated.yaml
+deploy/rtc/turnserver.generated.conf
+deploy/rtc/turnserver.conf
+deploy/rtc/.env

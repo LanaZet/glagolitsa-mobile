@@ -1,0 +1,67 @@
+# RTC edge stack for a stronger host (stage 1).
+# Run next to Go API, not inside the API process.
+#
+#   cd server/deploy/rtc
+#   cp .env.example .env   # fill secrets locally, never commit .env
+#   docker compose -f docker-compose.rtc.yml up -d
+#
+# DNS (even with one region):
+#   rtc-<region>.example  -> this host (WSS / LiveKit)
+#   turn-<region>.example -> this host (TURN/UDP + TURN/TLS)
+#   rtc.example           -> future geo entrypoint (CNAME/latency DNS later)
+#
+# Security:
+#   - Do not publish Redis publicly.
+#   - LiveKit HTTP stays on loopback or private network; expose only WSS via reverse proxy.
+#   - Never put LIVEKIT_API_SECRET or TURN_SHARED_SECRET in git.
+
+services:
+  redis-rtc:
+    image: redis:7-alpine
+    restart: unless-stopped
+    command: ["redis-server", "--save", "", "--appendonly", "no", "--bind", "0.0.0.0"]
+    # Bind only to compose network — no host port publish.
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    mem_limit: 256m
+
+  livekit:
+    image: livekit/livekit-server:v1.8.4
+    restart: unless-stopped
+    depends_on:
+      redis-rtc:
+        condition: service_healthy
+    command: ["--config", "/etc/livekit.yaml"]
+    environment:
+      LIVEKIT_redis_address: redis-rtc:6379
+    volumes:
+      - ./livekit.yaml:/etc/livekit.yaml:ro
+    # Dev host mapping; production should put WSS on 443 via Caddy and keep
+    # 7880 loopback-only.
+    ports:
+      - "127.0.0.1:7880:7880"
+      - "7881:7881"
+      - "50000-50100:50000-50100/udp"
+    healthcheck:
+      # Distinguishes process up from TURN health (TURN is a separate service).
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:7880"]
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    mem_limit: 1g
+
+  coturn:
+    image: coturn/coturn:4.6.2
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - ./turnserver.conf:/etc/turnserver.conf:ro
+    # Host networking simplifies external-ip / UDP relay. Ensure turnserver.conf
+    # exists (copy from turnserver.conf.example) before start.
+    # Health is checked from scripts/verify-rtc-edge-smoke.sh (UDP/TLS allocate).
+
+volumes: {}

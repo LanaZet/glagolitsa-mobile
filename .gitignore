@@ -1,0 +1,19 @@
+.gradle/
+.idea/
+.kotlin/
+build/
+local.properties
+androidApp/google-services.json
+server/bin/
+*.iml
+.DS_Store
+captures/
+.externalNativeBuild/
+.cxx/
+.run/
+iosApp/Pods/
+iosApp/*.xcworkspace/xcuserdata/
+# RTC generated secrets (never commit)
+server/deploy/rtc/*.generated.*
+server/deploy/rtc/turnserver.conf
+server/deploy/rtc/.env

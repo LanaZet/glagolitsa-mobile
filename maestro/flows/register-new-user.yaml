@@ -1,0 +1,68 @@
+# E2E: новый пользователь → регистрация → «Чаты» → виден в поиске.
+# Паттерн как у Signal: уникальные testTag, короткие таймауты, явные переходы экранов.
+#
+#   MAESTRO_DEVICE=emulator ./scripts/run-maestro-register-e2e.sh
+appId: com.glagolitsa.mobile
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "Вход"
+    timeout: 15000
+
+# --- Регистрация ---
+- tapOn: "Нет аккаунта? Зарегистрироваться"
+- extendedWaitUntil:
+    visible: "Регистрация"
+    timeout: 8000
+- tapOn: "Логин латиницей"
+- inputText: ${USERNAME}
+- tapOn: "Пароль"
+- inputText: ${PASSWORD}
+- tapOn: "Повторите пароль"
+- inputText: ${PASSWORD}
+- hideKeyboard
+- scrollUntilVisible:
+    element:
+      text: "Создать аккаунт"
+    direction: DOWN
+    timeout: 8000
+# Заголовок экрана — «Регистрация»; на экране одна кнопка «Создать аккаунт».
+- tapOn: "Создать аккаунт"
+# Регистрация + device keys: целевой SLA ~30–60 с на реальном устройстве.
+- extendedWaitUntil:
+    visible: "Чаты"
+    timeout: 90000
+- assertNotVisible:
+    text: ".*(не удалось|ошибка|VPN|подключ|устройств).*"
+    optional: true
+- assertVisible: "Чаты"
+
+# --- Выход, вход проверяющим аккаунтом ---
+- tapOn: "Настройки"
+- scrollUntilVisible:
+    element:
+      text: "Выйти из аккаунта"
+    direction: DOWN
+    timeout: 10000
+- tapOn: "Выйти из аккаунта"
+- extendedWaitUntil:
+    visible: "Вход"
+    timeout: 15000
+- tapOn: "Логин"
+- inputText: ${VERIFY_USERNAME}
+- tapOn: "Пароль"
+- inputText: ${VERIFY_PASSWORD}
+- hideKeyboard
+- tapOn: "Войти"
+- extendedWaitUntil:
+    visible: "Чаты"
+    timeout: 45000
+
+# --- Поиск нового пользователя ---
+- tapOn: "Поиск чатов и людей"
+- inputText: ${USERNAME}
+- extendedWaitUntil:
+    visible: "Люди"
+    timeout: 15000
+- assertVisible: "@${USERNAME}"

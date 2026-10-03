@@ -1,0 +1,24 @@
+# Level 4 — UI E2E: вход без device_id не пускает в «Чаты».
+# Требует: APK на устройстве, API с актуальным authz (device gate).
+#
+#   maestro test maestro/flows/login-device-gate.yaml \
+#     -e USERNAME=flow-test -e PASSWORD='FlowTest2026!'
+appId: com.glagolitsa.mobile
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "Вход"
+    timeout: 20000
+- tapOn: "Логин"
+- inputText: ${USERNAME}
+- tapOn: "Пароль"
+- inputText: ${PASSWORD}
+- tapOn: "Войти"
+# Успех: экран «Чаты» / вкладки. Провал device gate: остаёмся на «Вход» или видим ошибку.
+- extendedWaitUntil:
+    visible:
+      text: ".*(device|устройств|VPN|подключ).*"
+    timeout: 25000
+    optional: true
+- assertNotVisible: "Чаты"

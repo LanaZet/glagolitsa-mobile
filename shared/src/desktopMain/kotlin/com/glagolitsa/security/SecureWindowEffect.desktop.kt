@@ -1,0 +1,9 @@
+// Copyright (c) 2026-present Glagolitsa contributors. All Rights Reserved.
+// See LICENSE for license information.
+
+package com.glagolitsa.security
+
+import androidx.compose.runtime.Composable
+
+@Composable
+actual fun SecureWindowEffect(enabled: Boolean) = Unit

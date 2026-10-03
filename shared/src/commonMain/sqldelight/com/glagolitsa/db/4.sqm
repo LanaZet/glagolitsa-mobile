@@ -1,0 +1,7 @@
+-- Copyright (c) 2026-present Glagolitsa contributors. All Rights Reserved.
+-- See LICENSE for license information.
+
+ALTER TABLE app_session ADD COLUMN avatar_url TEXT;
+ALTER TABLE app_session ADD COLUMN presence TEXT;
+ALTER TABLE app_session ADD COLUMN nickname TEXT;
+ALTER TABLE app_session ADD COLUMN position TEXT;

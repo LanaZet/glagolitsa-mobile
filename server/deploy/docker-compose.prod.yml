@@ -1,0 +1,35 @@
+# Минимальный стек для чатов на VPS ~1 GB RAM.
+# Только Postgres. Redis, MinIO и LiveKit не поднимаем.
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: glagolitsa
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+      POSTGRES_DB: glagolitsa
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - glagolitsa_pg:/var/lib/postgresql/data
+    command:
+      - postgres
+      - -c
+      - shared_buffers=64MB
+      - -c
+      - effective_cache_size=128MB
+      - -c
+      - maintenance_work_mem=32MB
+      - -c
+      - work_mem=4MB
+      - -c
+      - max_connections=30
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U glagolitsa -d glagolitsa"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    mem_limit: 384m
+
+volumes:
+  glagolitsa_pg:

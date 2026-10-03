@@ -1,0 +1,4 @@
+-- Copyright (c) 2026-present Glagolitsa contributors. All Rights Reserved.
+-- See LICENSE for license information.
+
+ALTER TABLE chats ADD COLUMN avatar_url TEXT;

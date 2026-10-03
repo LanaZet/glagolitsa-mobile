@@ -1,0 +1,56 @@
+# E2E (2/2): получатель логинится, открывает чат, читает сообщение.
+# Гарантия UI: расшифрованный текст виден в ленте после sync/processMessageQueue.
+#
+# Запускать после dm-message-send.yaml и verify-e2e-relay-encryption.sh
+appId: com.glagolitsa.mobile
+---
+- launchApp:
+    clearState: false
+- extendedWaitUntil:
+    visible: "Вход"
+    timeout: 15000
+
+# --- Вход получателя ---
+- tapOn: "Логин"
+- inputText: ${RECIPIENT_USERNAME}
+- tapOn: "Пароль"
+- inputText: ${RECIPIENT_PASSWORD}
+- hideKeyboard
+- tapOn: "Войти"
+- extendedWaitUntil:
+    visible: "Чаты"
+    timeout: 60000
+
+# --- Открыть DM: из списка «Личные» или через поиск ---
+- tapOn: "Личные"
+- tapOn:
+    text: "Открыть чат ${SENDER_USERNAME}"
+    optional: true
+- runFlow:
+    when:
+      notVisible:
+        id: "chat-compose"
+    commands:
+      - tapOn: "Поиск чатов и людей"
+      - inputText: ${SENDER_USERNAME}
+      - hideKeyboard
+      - extendedWaitUntil:
+          visible: "Написать @${SENDER_USERNAME}"
+          timeout: 20000
+      - tapOn: "Написать @${SENDER_USERNAME}"
+- extendedWaitUntil:
+    visible:
+      id: "chat-compose"
+    timeout: 20000
+
+- tapOn:
+    text: "Принять"
+    optional: true
+
+# Получатель видит расшифрованное сообщение.
+- extendedWaitUntil:
+    visible: ${E2E_MSG}
+    timeout: 90000
+- assertVisible:
+    id: "chat-messages"
+- assertVisible: ${E2E_MSG}

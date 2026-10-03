@@ -1,0 +1,8 @@
+-- Copyright (c) 2026-present Glagolitsa contributors. All Rights Reserved.
+-- See LICENSE for license information.
+
+ALTER TABLE local_attachments ADD COLUMN kind TEXT;
+ALTER TABLE local_attachments ADD COLUMN width INTEGER;
+ALTER TABLE local_attachments ADD COLUMN height INTEGER;
+ALTER TABLE local_attachments ADD COLUMN duration_ms INTEGER;
+ALTER TABLE local_attachments ADD COLUMN waveform TEXT;

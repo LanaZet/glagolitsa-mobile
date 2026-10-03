@@ -1,0 +1,59 @@
+# User opens a chat, app relaunches without clearState — should return to main shell
+# still logged in (not forced to password). Chat list remains available.
+#
+#   maestro test maestro/flows/session-chat-stay-after-relaunch.yaml \
+#     -e USERNAME=... -e PASSWORD=... -e PEER_USERNAME=...
+appId: com.glagolitsa.mobile
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "Glagolitsa"
+    timeout: 30000
+- tapOn:
+    text: "Войти как ${USERNAME}"
+    optional: true
+- runFlow:
+    when:
+      notVisible: "Чаты"
+    commands:
+      - tapOn: "Логин"
+      - inputText: ${USERNAME}
+      - tapOn: "Пароль"
+      - inputText: ${PASSWORD}
+      - hideKeyboard
+      - tapOn: "Войти"
+- extendedWaitUntil:
+    visible: "Чаты"
+    timeout: 90000
+- tapOn: "Личные"
+- runFlow:
+    when:
+      visible: "Поиск чатов и людей"
+    commands:
+      - tapOn: "Поиск чатов и людей"
+      - inputText: ${PEER_USERNAME}
+      - hideKeyboard
+      - extendedWaitUntil:
+          visible: "Написать @${PEER_USERNAME}"
+          timeout: 20000
+          optional: true
+      - tapOn:
+          text: "Написать @${PEER_USERNAME}"
+          optional: true
+- runFlow:
+    when:
+      visible:
+        id: "chat-compose"
+    commands:
+      - assertVisible:
+          id: "chat-messages"
+# Relaunch: session must restore — not login screen.
+- launchApp:
+    clearState: false
+- extendedWaitUntil:
+    visible: "Чаты"
+    timeout: 90000
+- assertVisible: "Чаты"
+- assertNotVisible:
+    text: ".*(Вход|Войти)$"

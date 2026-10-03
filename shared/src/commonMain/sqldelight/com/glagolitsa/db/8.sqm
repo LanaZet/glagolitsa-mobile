@@ -1,0 +1,5 @@
+-- Copyright (c) 2026-present Glagolitsa contributors. All Rights Reserved.
+-- See LICENSE for license information.
+
+ALTER TABLE messages ADD COLUMN reply_preview_sender_id TEXT;
+ALTER TABLE messages ADD COLUMN reply_preview_body TEXT;

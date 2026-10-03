@@ -1,0 +1,64 @@
+# Send на эмуляторе: отдельная сессия test, logout только здесь (не трогает телефон bob).
+appId: com.glagolitsa.mobile
+---
+- launchApp:
+    clearState: true
+- extendedWaitUntil:
+    visible: "Glagolitsa"
+    timeout: 30000
+- tapOn:
+    text: "Войти как ${SENDER_USERNAME}"
+    optional: true
+- runFlow:
+    when:
+      notVisible: "Чаты"
+    commands:
+      - tapOn: "Логин"
+      - inputText: ${SENDER_USERNAME}
+      - tapOn: "Пароль"
+      - inputText: ${SENDER_PASSWORD}
+      - hideKeyboard
+      - tapOn: "Войти"
+- extendedWaitUntil:
+    visible: "Чаты"
+    timeout: 60000
+- tapOn: "Личные"
+- tapOn:
+    text: "Открыть чат ${RECIPIENT_USERNAME}"
+    optional: true
+- runFlow:
+    when:
+      notVisible:
+        id: "chat-compose"
+    commands:
+      - tapOn: "Поиск чатов и людей"
+      - inputText: ${RECIPIENT_USERNAME}
+      - hideKeyboard
+      - extendedWaitUntil:
+          visible: "Написать @${RECIPIENT_USERNAME}"
+          timeout: 20000
+      - tapOn: "Написать @${RECIPIENT_USERNAME}"
+- extendedWaitUntil:
+    visible:
+      id: "chat-compose"
+    timeout: 20000
+- tapOn:
+    text: "Принять"
+    optional: true
+- tapOn:
+    id: "chat-message-input"
+- inputText: ${E2E_MSG}
+- hideKeyboard
+- tapOn:
+    id: "chat-send"
+- extendedWaitUntil:
+    visible: ${E2E_MSG}
+    timeout: 20000
+- assertVisible:
+    id: "chat-messages"
+- assertVisible: ${E2E_MSG}
+- extendedWaitUntil:
+    notVisible: "◷"
+    timeout: 10000
+- assertVisible:
+    id: "chat-message-status-delivered"

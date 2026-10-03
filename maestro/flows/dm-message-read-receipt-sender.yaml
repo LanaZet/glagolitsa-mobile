@@ -1,0 +1,14 @@
+# Отправитель остается в открытом DM и должен увидеть read receipt после просмотра получателем.
+appId: com.glagolitsa.mobile
+---
+- launchApp:
+    clearState: false
+- extendedWaitUntil:
+    visible:
+      id: "chat-compose"
+    timeout: 15000
+- assertVisible: ${E2E_MSG}
+- extendedWaitUntil:
+    visible:
+      id: "chat-message-status-read"
+    timeout: 45000

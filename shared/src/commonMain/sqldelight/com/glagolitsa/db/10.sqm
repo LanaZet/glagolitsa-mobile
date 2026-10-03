@@ -1,0 +1,5 @@
+-- Copyright (c) 2026-present Glagolitsa contributors. All Rights Reserved.
+-- See LICENSE for license information.
+
+ALTER TABLE local_attachments ADD COLUMN thumbnail_key TEXT;
+ALTER TABLE local_attachments ADD COLUMN thumbnail_size INTEGER NOT NULL DEFAULT 0;

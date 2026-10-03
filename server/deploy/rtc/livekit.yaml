@@ -1,0 +1,43 @@
+# LiveKit SFU sample for Glagolitsa RTC edge (stage 1).
+# Copy to /etc/glagolitsa/livekit.yaml and set keys/IPs via env or file.
+# Never commit real keys. Media is E2EE from clients; egress/recording stay off.
+
+port: 7880
+bind_addresses:
+  - ""
+
+rtc:
+  # Public IP or hostname clients use for ICE. Required behind NAT.
+  # use_external_ip: true
+  # node_ip: 203.0.113.10
+  tcp_port: 7881
+  port_range_start: 50000
+  port_range_end: 50100
+  # Prefer UDP; TCP is fallback when UDP is blocked.
+  use_ice_lite: false
+
+redis:
+  # Production LiveKit needs Redis for multi-node / reliable room state.
+  address: redis:6379
+  # password: set via LIVEKIT_REDIS_PASSWORD if needed
+
+# Keys must match LIVEKIT_API_KEY / LIVEKIT_API_SECRET on the Go API.
+keys:
+  # devkey: secret-replace-me
+
+logging:
+  level: info
+  # Never raise log level in a way that dumps tokens or room JWTs.
+
+room:
+  # Private app calls: no auto-create from random clients without token.
+  auto_create: true
+  empty_timeout: 300
+  max_participants: 16
+
+# Region label for multi-region readiness (even with a single node).
+region: primary
+
+# TURN is provided by coturn alongside LiveKit (see turnserver.conf.example).
+# LiveKit embedded TURN can be enabled later; we keep TURN as a separate service
+# so health checks can distinguish SFU-up from TURN-up.

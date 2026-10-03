@@ -1,0 +1,88 @@
+# E2E (1/2): отправитель логинится, открывает DM, шлёт уникальное сообщение.
+# Гарантия UI: экран чата обновляется сразу (optimistic + relay).
+#
+#   maestro test maestro/flows/dm-message-send.yaml \
+#     -e SENDER_USERNAME=marco -e SENDER_PASSWORD='...' \
+#     -e RECIPIENT_USERNAME=polo -e E2E_MSG='e2e-1730000000-hello'
+appId: com.glagolitsa.mobile
+---
+# clearState: false — сохраняем device keys получателя после prime-device.
+- launchApp:
+    clearState: false
+- extendedWaitUntil:
+    visible: "Вход"
+    timeout: 15000
+
+# --- Вход отправителя ---
+- tapOn: "Логин"
+- inputText: ${SENDER_USERNAME}
+- tapOn: "Пароль"
+- inputText: ${SENDER_PASSWORD}
+- hideKeyboard
+- tapOn: "Войти"
+- extendedWaitUntil:
+    visible: "Чаты"
+    timeout: 60000
+
+# --- Открыть DM: из списка «Личные» или через поиск ---
+- tapOn: "Личные"
+- tapOn:
+    text: "Открыть чат ${RECIPIENT_USERNAME}"
+    optional: true
+- runFlow:
+    when:
+      notVisible:
+        id: "chat-compose"
+    commands:
+      - tapOn: "Поиск чатов и людей"
+      - inputText: ${RECIPIENT_USERNAME}
+      - hideKeyboard
+      - extendedWaitUntil:
+          visible: "Написать @${RECIPIENT_USERNAME}"
+          timeout: 20000
+      - tapOn: "Написать @${RECIPIENT_USERNAME}"
+- extendedWaitUntil:
+    visible:
+      id: "chat-compose"
+    timeout: 20000
+
+# Диалог смены ключа безопасности (если есть).
+- tapOn:
+    text: "Принять"
+    optional: true
+
+# --- Отправка ---
+- tapOn:
+    id: "chat-message-input"
+- inputText: ${E2E_MSG}
+- hideKeyboard
+- tapOn:
+    id: "chat-send"
+# Отправитель видит текст в ленте без перезагрузки экрана.
+- extendedWaitUntil:
+    visible: ${E2E_MSG}
+    timeout: 20000
+- assertVisible:
+    id: "chat-messages"
+- assertVisible: ${E2E_MSG}
+- extendedWaitUntil:
+    notVisible: "◷"
+    timeout: 10000
+- assertVisible:
+    id: "chat-message-status-delivered"
+
+# --- Выход (получатель ещё не в приложении — очередь relay на сервере) ---
+- tapOn: "Назад"
+- extendedWaitUntil:
+    visible: "Чаты"
+    timeout: 10000
+- tapOn: "Настройки"
+- scrollUntilVisible:
+    element:
+      text: "Выйти из аккаунта"
+    direction: DOWN
+    timeout: 10000
+- tapOn: "Выйти из аккаунта"
+- extendedWaitUntil:
+    visible: "Вход"
+    timeout: 15000

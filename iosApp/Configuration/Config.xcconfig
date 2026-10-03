@@ -1,0 +1,8 @@
+PRODUCT_NAME = Glagolitsa
+PRODUCT_BUNDLE_IDENTIFIER = com.glagolitsa.mobile
+PRODUCT_MODULE_NAME = iosApp
+SWIFT_VERSION = 5.0
+IPHONEOS_DEPLOYMENT_TARGET = 17.2
+TARGETED_DEVICE_FAMILY = 1,2
+
+OTHER_LDFLAGS = $(inherited) -framework Shared -lsqlite3

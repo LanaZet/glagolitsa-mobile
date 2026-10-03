@@ -1,0 +1,55 @@
+# Получатель уже залогинен на втором устройстве — открыть чат и прочитать сообщение.
+appId: com.glagolitsa.mobile
+---
+- launchApp:
+    clearState: false
+- runFlow:
+    when:
+      visible:
+        text: ".*(Вход|Войти как).*"
+    commands:
+      - tapOn:
+          text: "Войти как ${RECIPIENT_USERNAME}"
+          optional: true
+      - runFlow:
+          when:
+            notVisible: "Чаты"
+          commands:
+            - tapOn: "Логин"
+            - inputText: ${RECIPIENT_USERNAME}
+            - tapOn: "Пароль"
+            - inputText: ${RECIPIENT_PASSWORD}
+            - hideKeyboard
+            - tapOn: "Войти"
+- extendedWaitUntil:
+    visible: "Чаты"
+    timeout: 60000
+- tapOn: "Личные"
+- tapOn:
+    text: "Открыть чат ${SENDER_USERNAME}"
+    optional: true
+- runFlow:
+    when:
+      notVisible:
+        id: "chat-compose"
+    commands:
+      - tapOn: "Поиск чатов и людей"
+      - inputText: ${SENDER_USERNAME}
+      - hideKeyboard
+      - extendedWaitUntil:
+          visible: "Написать @${SENDER_USERNAME}"
+          timeout: 20000
+      - tapOn: "Написать @${SENDER_USERNAME}"
+- extendedWaitUntil:
+    visible:
+      id: "chat-compose"
+    timeout: 20000
+- tapOn:
+    text: "Принять"
+    optional: true
+- extendedWaitUntil:
+    visible: ${E2E_MSG}
+    timeout: 90000
+- assertVisible:
+    id: "chat-messages"
+- assertVisible: ${E2E_MSG}

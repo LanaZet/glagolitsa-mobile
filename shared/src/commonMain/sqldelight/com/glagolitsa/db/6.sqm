@@ -1,0 +1,6 @@
+-- Copyright (c) 2026-present Glagolitsa contributors. All Rights Reserved.
+-- See LICENSE for license information.
+
+ALTER TABLE messages ADD COLUMN expires_at TEXT;
+
+CREATE INDEX IF NOT EXISTS messages_expires_at ON messages(expires_at);

@@ -1,0 +1,62 @@
+# Установка: apt install caddy
+# Файл: /etc/caddy/Caddyfile
+#
+# Call/WS hygiene:
+# - global protocols h1 (disable HTTP/2 to clients — fixes half-open multiplex hangs)
+# - reverse_proxy transport versions 1.1 + flush_interval -1
+# - no gzip on API JSON
+# - access logs for /api/calls* and /api/ws
+#
+{
+    servers {
+        protocols h1
+    }
+}
+
+# Вариант A — домен + HTTPS:
+your-domain.example {
+    handle_path /downloads/* {
+        root * /var/www/glagolitsa-downloads
+        file_server
+    }
+    @metrics path /metrics
+    respond @metrics 404
+
+    @static path /downloads/*
+    encode @static zstd gzip
+
+    @apiCalls path /api/calls /api/calls/*
+    @apiWs path /api/ws
+    log @apiCalls {
+        output stdout
+        format console
+    }
+    log @apiWs {
+        output stdout
+        format console
+    }
+
+    @websocket {
+        path /api/ws
+        header Connection *Upgrade*
+        header Upgrade websocket
+    }
+    reverse_proxy @websocket 127.0.0.1:8080 {
+        flush_interval -1
+        transport http {
+            versions 1.1
+        }
+    }
+    reverse_proxy 127.0.0.1:8080 {
+        flush_interval -1
+        transport http {
+            versions 1.1
+        }
+    }
+}
+
+# RTC: LiveKit WSS stays on the API host (`handle /rtc*` above) so signaling
+# can ride Cloudflare orange-cloud. TURN/UDP+TLS must NOT be orange-clouded:
+#   turn.example  A  <origin-ip>  DNS-only
+# TCP/443 is SNI-muxed by sslh (see scripts/setup-turn-443.sh): turn.* → coturn,
+# api.* → this Caddy. UDP/443 is bound directly by coturn.

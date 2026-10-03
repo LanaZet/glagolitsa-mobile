@@ -1,0 +1,9 @@
+-- Copyright (c) 2026-present Glagolitsa contributors. All Rights Reserved.
+-- See LICENSE for license information.
+
+CREATE TABLE IF NOT EXISTS app_session (
+    id INTEGER NOT NULL PRIMARY KEY CHECK (id = 1),
+    token TEXT NOT NULL,
+    user_id TEXT NOT NULL,
+    username TEXT NOT NULL
+);

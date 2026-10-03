@@ -1,0 +1,368 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		A10000000000000000000020BF /* iOSApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000020 /* iOSApp.swift */; };
+		A10000000000000000000021BF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000021 /* ContentView.swift */; };
+		A10000000000000000000022BF /* CallKitBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000022 /* CallKitBridge.swift */; };
+		A10000000000000000000025BF /* AppleCryptoKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000025 /* AppleCryptoKit.swift */; };
+		A10000000000000000000026BF /* LibSignalCryptoHost.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000026 /* LibSignalCryptoHost.swift */; };
+		A10000000000000000000027BF /* IosKeychain.swift in Sources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000027 /* IosKeychain.swift */; };
+		A10000000000000000000041 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A10000000000000000000040 /* Assets.xcassets */; };
+		B5CDCB473465D340C1709DE7 /* Pods_iosApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D0EB17E2B8DC5E8B49B41AEE /* Pods_iosApp.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		31DF035E7D4C5108D7D5AA66 /* Pods-iosApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.debug.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.debug.xcconfig"; sourceTree = "<group>"; };
+		9402DDDB6158FCFDFEFC6121 /* Pods-iosApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-iosApp.release.xcconfig"; path = "Target Support Files/Pods-iosApp/Pods-iosApp.release.xcconfig"; sourceTree = "<group>"; };
+		A10000000000000000000007 /* Glagolitsa.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Glagolitsa.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A10000000000000000000020 /* iOSApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = iOSApp.swift; sourceTree = "<group>"; };
+		A10000000000000000000021 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		A10000000000000000000022 /* CallKitBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallKitBridge.swift; sourceTree = "<group>"; };
+		A10000000000000000000023 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A10000000000000000000024 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = Config.xcconfig; path = Configuration/Config.xcconfig; sourceTree = "<group>"; };
+		A10000000000000000000025 /* AppleCryptoKit.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppleCryptoKit.swift; sourceTree = "<group>"; };
+		A10000000000000000000026 /* LibSignalCryptoHost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibSignalCryptoHost.swift; sourceTree = "<group>"; };
+		A10000000000000000000027 /* IosKeychain.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IosKeychain.swift; sourceTree = "<group>"; };
+		A10000000000000000000040 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		D0EB17E2B8DC5E8B49B41AEE /* Pods_iosApp.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_iosApp.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		A10000000000000000000004 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B5CDCB473465D340C1709DE7 /* Pods_iosApp.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		08BD2FA7AE0B69653EDC5997 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				31DF035E7D4C5108D7D5AA66 /* Pods-iosApp.debug.xcconfig */,
+				9402DDDB6158FCFDFEFC6121 /* Pods-iosApp.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000010 /* iosApp */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000020 /* iOSApp.swift */,
+				A10000000000000000000021 /* ContentView.swift */,
+				A10000000000000000000022 /* CallKitBridge.swift */,
+				A10000000000000000000025 /* AppleCryptoKit.swift */,
+				A10000000000000000000026 /* LibSignalCryptoHost.swift */,
+				A10000000000000000000027 /* IosKeychain.swift */,
+				A10000000000000000000040 /* Assets.xcassets */,
+				A10000000000000000000023 /* Info.plist */,
+			);
+			path = iosApp;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000011 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000007 /* Glagolitsa.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		A10000000000000000000012 = {
+			isa = PBXGroup;
+			children = (
+				A10000000000000000000010 /* iosApp */,
+				A10000000000000000000024 /* Config.xcconfig */,
+				A10000000000000000000011 /* Products */,
+				08BD2FA7AE0B69653EDC5997 /* Pods */,
+				F149531244A5F839027AACFD /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		F149531244A5F839027AACFD /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				D0EB17E2B8DC5E8B49B41AEE /* Pods_iosApp.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		A10000000000000000000002 /* iosApp */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = A10000000000000000000035 /* Build configuration list for PBXNativeTarget "iosApp" */;
+			buildPhases = (
+				88804D69463E4AC26E652F47 /* [CP] Check Pods Manifest.lock */,
+				A10000000000000000000006 /* Compile Kotlin Framework */,
+				A10000000000000000000003 /* Sources */,
+				A10000000000000000000004 /* Frameworks */,
+				A10000000000000000000005 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = iosApp;
+			productName = Glagolitsa;
+			productReference = A10000000000000000000007 /* Glagolitsa.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		A10000000000000000000001 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+			};
+			buildConfigurationList = A10000000000000000000034 /* Build configuration list for PBXProject "iosApp" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = A10000000000000000000012;
+			productRefGroup = A10000000000000000000011 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				A10000000000000000000002 /* iosApp */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		A10000000000000000000005 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000041 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		88804D69463E4AC26E652F47 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-iosApp-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		A10000000000000000000006 /* Compile Kotlin Framework */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Compile Kotlin Framework";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -euo pipefail\ncd \"$SRCROOT/..\"\nCONF=\"${CONFIGURATION:-Debug}\"\nSDK=\"${SDK_NAME:-iphonesimulator}\"\ncase \"$SDK\" in\niphoneos*)\n  KMP_TARGET=\"IosArm64\"\n  KMP_BIN_TARGET=\"iosArm64\"\n  KMP_RESOURCE_SOURCE=\"iosArm64Main\"\n  ;;\n*)\n  KMP_TARGET=\"IosSimulatorArm64\"\n  KMP_BIN_TARGET=\"iosSimulatorArm64\"\n  KMP_RESOURCE_SOURCE=\"iosSimulatorArm64Main\"\n  ;;\nesac\n# 1) Shared.framework\nSRC=\"shared/build/bin/${KMP_BIN_TARGET}/debugFramework/Shared.framework\"\n./gradlew \":shared:linkDebugFramework${KMP_TARGET}\"\nif [ ! -d \"$SRC\" ]; then\n  echo \"error: Shared.framework missing at $SRC\" >&2\n  exit 1\nfi\nfor name in \"$SDK\" cli iphonesimulator; do\n  DEST=\"shared/build/xcode-frameworks/${CONF}/${name}\"\n  mkdir -p \"$DEST\"\n  rm -rf \"$DEST/Shared.framework\"\n  cp -R \"$SRC\" \"$DEST/Shared.framework\"\ndone\n# 2) Compose multiplatform resources into .app (required; missing -> crash at setContent)\nRES_SRC=\"shared/build/generated/compose/resourceGenerator/assembledResources/${KMP_RESOURCE_SOURCE}/composeResources\"\nif [ ! -d \"$RES_SRC\" ]; then\n  ./gradlew :shared:generateResourceAccessorsForCommonMain \":shared:assemble${KMP_TARGET}MainResources\" || true\nfi\nif [ ! -d \"$RES_SRC\" ]; then\n  # fallback after link task generates them\n  RES_SRC=$(find shared/build/generated/compose -type d -path \"*/${KMP_RESOURCE_SOURCE}/composeResources\" | head -1 || true)\nfi\nif [ -n \"${TARGET_BUILD_DIR:-}\" ] && [ -n \"${UNLOCALIZED_RESOURCES_FOLDER_PATH:-}\" ] && [ -d \"$RES_SRC\" ]; then\n  RES_DST=\"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/compose-resources/composeResources\"\n  mkdir -p \"$RES_DST\"\n  rsync -a --delete \"$RES_SRC/\" \"$RES_DST/\"\n  echo \"Compose resources -> $RES_DST\"\nelif [ -n \"${TARGET_BUILD_DIR:-}\" ] && [ -d \"$RES_SRC\" ]; then\n  RES_DST=\"${TARGET_BUILD_DIR}/Glagolitsa.app/compose-resources/composeResources\"\n  mkdir -p \"$RES_DST\"\n  rsync -a --delete \"$RES_SRC/\" \"$RES_DST/\"\n  echo \"Compose resources -> $RES_DST\"\nelse\n  echo \"warning: compose resources not copied (RES_SRC=$RES_SRC TARGET_BUILD_DIR=${TARGET_BUILD_DIR:-})\"\nfi\necho \"Shared.framework staged for $SDK\"\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		A10000000000000000000003 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				A10000000000000000000020BF /* iOSApp.swift in Sources */,
+				A10000000000000000000021BF /* ContentView.swift in Sources */,
+				A10000000000000000000022BF /* CallKitBridge.swift in Sources */,
+				A10000000000000000000025BF /* AppleCryptoKit.swift in Sources */,
+				A10000000000000000000026BF /* LibSignalCryptoHost.swift in Sources */,
+				A10000000000000000000027BF /* IosKeychain.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		A10000000000000000000030 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A10000000000000000000024 /* Config.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_TESTABILITY = YES;
+				GCC_DYNAMIC_NO_PIC = NO;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		A10000000000000000000031 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A10000000000000000000024 /* Config.xcconfig */;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				IPHONEOS_DEPLOYMENT_TARGET = 17.2;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		A10000000000000000000032 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 31DF035E7D4C5108D7D5AA66 /* Pods-iosApp.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CARGO_BUILD_TARGET[sdk=iphoneos*]" = "aarch64-apple-ios";
+				"CARGO_BUILD_TARGET[sdk=iphonesimulator*]" = "aarch64-apple-ios-sim";
+				CODE_SIGN_ENTITLEMENTS = iosApp/Glagolitsa.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 15;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_PREVIEWS = YES;
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = x86_64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
+					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/cli",
+					"$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/debugFramework",
+				);
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = iosApp/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBSIGNAL_FFI_TEMP_DIR = "$(BUILD_DIR)/../Intermediates.noindex/Pods.build/libsignal_ffi";
+				MARKETING_VERSION = 0.1.13;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					Shared,
+					"-lsqlite3",
+					"-lc++",
+					"$(LIBSIGNAL_FFI_TEMP_DIR)/target/$(CARGO_BUILD_TARGET)/release/libsignal_ffi.a",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.glagolitsa.mobile;
+				PRODUCT_NAME = Glagolitsa;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		A10000000000000000000033 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 9402DDDB6158FCFDFEFC6121 /* Pods-iosApp.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CARGO_BUILD_TARGET[sdk=iphoneos*]" = "aarch64-apple-ios";
+				"CARGO_BUILD_TARGET[sdk=iphonesimulator*]" = "aarch64-apple-ios-sim";
+				CODE_SIGN_ENTITLEMENTS = iosApp/Glagolitsa.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 15;
+				DEVELOPMENT_TEAM = "";
+				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = x86_64;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
+					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/cli",
+					"$(SRCROOT)/../shared/build/bin/iosSimulatorArm64/debugFramework",
+				);
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = iosApp/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				LIBSIGNAL_FFI_TEMP_DIR = "$(BUILD_DIR)/../Intermediates.noindex/Pods.build/libsignal_ffi";
+				MARKETING_VERSION = 0.1.13;
+				OTHER_LDFLAGS = (
+					"$(inherited)",
+					"-framework",
+					Shared,
+					"-lsqlite3",
+					"-lc++",
+					"$(LIBSIGNAL_FFI_TEMP_DIR)/target/$(CARGO_BUILD_TARGET)/release/libsignal_ffi.a",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.glagolitsa.mobile;
+				PRODUCT_NAME = Glagolitsa;
+				SWIFT_ENABLE_EXPLICIT_MODULES = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		A10000000000000000000034 /* Build configuration list for PBXProject "iosApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000030 /* Debug */,
+				A10000000000000000000031 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+		A10000000000000000000035 /* Build configuration list for PBXNativeTarget "iosApp" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				A10000000000000000000032 /* Debug */,
+				A10000000000000000000033 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Debug;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = A10000000000000000000001 /* Project object */;
+}

@@ -1,0 +1,66 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Glagolitsa: Собрать APK для тестеров",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/build-prerelease-apk.sh",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Glagolitsa: Собрать APK и установить на телефон",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/build-prerelease-apk.sh",
+      "args": ["--install", "--no-dev-shortcuts"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Glagolitsa: Сунь Укун (эмулятор: local/public)",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/rebuild-emulator.sh",
+      "args": ["--test-build", "--interactive", "--reinstall", "--watch"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Glagolitsa: E2E (device)",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/run-maestro-e2e.sh",
+      "args": ["register"],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "focus": true
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Glagolitsa: Stop All",
+      "type": "shell",
+      "command": "${workspaceFolder}/scripts/stop-all.sh",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": []
+    }
+  ]
+}

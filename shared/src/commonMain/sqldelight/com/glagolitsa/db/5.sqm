@@ -1,0 +1,13 @@
+-- Copyright (c) 2026-present Glagolitsa contributors. All Rights Reserved.
+-- See LICENSE for license information.
+
+ALTER TABLE messages ADD COLUMN reply_to_message_id TEXT;
+ALTER TABLE messages ADD COLUMN thread_root_id TEXT;
+ALTER TABLE messages ADD COLUMN thread_parent_id TEXT;
+ALTER TABLE messages ADD COLUMN visibility TEXT NOT NULL DEFAULT 'main';
+
+CREATE INDEX IF NOT EXISTS messages_chat_visibility_created_at
+ON messages(chat_id, visibility, created_at);
+
+CREATE INDEX IF NOT EXISTS messages_thread_root_created_at
+ON messages(thread_root_id, created_at);
