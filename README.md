@@ -8,6 +8,14 @@ The project is under active development. Android currently has the most complete
 
 There is no hosted public service included with the repository. You can run the backend locally with Docker or deploy it to your own infrastructure. The `api.glagolit.me` domain found in the code identifies the author's deployment target; it does not imply that a public service is available.
 
+## Screenshots
+
+<p align="center">
+  <img src="docs/screenshots/chats-en.png" width="30%" alt="Glagolitsa chat list" />
+  <img src="docs/screenshots/profile-en.png" width="30%" alt="Glagolitsa profile and security settings" />
+  <img src="docs/screenshots/calls-en.png" width="30%" alt="Glagolitsa call history" />
+</p>
+
 ## Current capabilities
 
 | Area | Security model | Current support |

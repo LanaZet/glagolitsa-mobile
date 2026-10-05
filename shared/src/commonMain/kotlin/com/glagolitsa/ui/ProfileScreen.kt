@@ -131,6 +131,9 @@ import com.glagolitsa.ui.theme.AppThemeMode
 import com.glagolitsa.ui.theme.GlagolitsaColors
 import com.glagolitsa.ui.theme.GlagolitsaShapes
 import com.glagolitsa.ui.theme.GlagolitsaSpacing
+import com.glagolitsa.ui.i18n.AppLanguage
+import com.glagolitsa.ui.i18n.AppLanguageController
+import com.glagolitsa.ui.i18n.tr
 
 /**
  * Экран «Профиль» / «Настройки» — визуализация по референсу
@@ -160,6 +163,7 @@ fun ProfileScreen(
     var showAppearance by remember { mutableStateOf(false) }
     var showAudioProcessing by remember { mutableStateOf(false) }
     var showNotifications by remember { mutableStateOf(false) }
+    var showLanguagePicker by remember { mutableStateOf(false) }
     var updateDecision by remember { mutableStateOf<UpdateDecision?>(null) }
     var activeDeviceCount by remember { mutableStateOf<Int?>(null) }
     var showBackupDialog by remember { mutableStateOf(false) }
@@ -507,22 +511,15 @@ fun ProfileScreen(
         }
     }
 
-    val accountItems = remember(
-        secureRestoreHint,
-        secureCloudPresent,
-        secureHistoryEnabled,
-        pendingRecoveryChallenges,
-        recoveryKeySet,
-        recoveryLocalCreated,
-    ) {
-        listOf(
+    val selectedLanguage = AppLanguageController.language
+    val accountItems = listOf(
             ProfileMenuEntry(
-                title = "Устройства",
+                title = tr("Устройства", "Devices"),
                 icon = { ProfileMenuDevicesIcon(tint = it) },
                 onClick = { showDevices = true },
             ),
             ProfileMenuEntry(
-                title = "Защищённая история",
+                title = tr("Защищённая история", "Protected history"),
                 badge = if (secureRestoreHint) "!" else null,
                 badgeHighlight = secureRestoreHint,
                 icon = { ProfileMenuLockIcon(tint = it) },
@@ -533,8 +530,8 @@ fun ProfileScreen(
                 },
             ),
             ProfileMenuEntry(
-                title = "Восстановление",
-                subtitle = "Доступ к аккаунту",
+                title = tr("Восстановление", "Recovery"),
+                subtitle = tr("Доступ к аккаунту", "Account access"),
                 badge = when {
                     pendingRecoveryChallenges.isNotEmpty() -> "!"
                     recoveryKeySet || recoveryLocalCreated -> null
@@ -547,22 +544,19 @@ fun ProfileScreen(
                 },
             ),
         )
-    }
 
-    val historyItems = remember {
-        listOf(
+    val historyItems = listOf(
             ProfileMenuEntry(
-                title = "Избранное",
+                title = tr("Избранное", "Favorites"),
                 icon = { ProfileMenuStarIcon(tint = it) },
                 onClick = { showFavorites = true },
             ),
             ProfileMenuEntry(
-                title = "Недавние звонки",
+                title = tr("Недавние звонки", "Recent calls"),
                 icon = { ProfileMenuPhoneIcon(tint = it) },
                 onClick = { showCalls = true },
             ),
         )
-    }
 
     /**
      * All membership channels (public + private).
@@ -574,12 +568,11 @@ fun ProfileScreen(
             .filter { it.isChannel }
             .sortedBy { it.title.lowercase() }
     }
-    val myChannelItems = remember(myChannels) {
-        myChannels.map { chat ->
+    val myChannelItems = myChannels.map { chat ->
             val kindLabel = when {
                 chat.isPublicChannel && !chat.slug.isNullOrBlank() -> "@${chat.slug}"
-                chat.isPublicChannel -> "Публичный"
-                else -> "Личный"
+                chat.isPublicChannel -> tr("Публичный", "Public")
+                else -> tr("Личный", "Private")
             }
             // One subtitle line only — keep the row short (title + @slug / kind).
             ProfileMenuEntry(
@@ -588,7 +581,6 @@ fun ProfileScreen(
                 icon = { ProfileMenuChannelIcon(tint = it) },
                 onClick = { onChatSelected(chat) },
             )
-        }
     }
 
     // Pull latest membership (incl. just-created channels) when opening profile.
@@ -612,10 +604,9 @@ fun ProfileScreen(
         }
     }
 
-    val appItems = remember(updateBadge, heroOrnament, themeToggleDark) {
-        listOf(
+    val appItems = listOf(
             ProfileMenuEntry(
-                title = "Тема",
+                title = tr("Тема", "Theme"),
                 icon = { ProfileMenuThemeIcon(tint = it) },
                 trailingContent = {
                     ProfileThemeToggle(
@@ -635,37 +626,37 @@ fun ProfileScreen(
                 },
             ),
             ProfileMenuEntry(
-                title = "Уведомления",
-                subtitle = "Сообщения, звонки, превью",
+                title = tr("Уведомления", "Notifications"),
+                subtitle = tr("Сообщения, звонки, превью", "Messages, calls, and previews"),
                 icon = { ProfileMenuBellIcon(tint = it) },
                 onClick = { showNotifications = true },
             ),
             ProfileMenuEntry(
-                title = "Шумоподавление",
-                subtitle = "Звонки и голосовые",
+                title = tr("Шумоподавление", "Noise reduction"),
+                subtitle = tr("Звонки и голосовые", "Calls and voice messages"),
                 icon = { ProfileMenuNoiseIcon(tint = it) },
                 onClick = { showAudioProcessing = true },
             ),
             ProfileMenuEntry(
-                title = "Оформление",
+                title = tr("Оформление", "Appearance"),
                 trailing = heroOrnament.title,
                 icon = { ProfileMenuAppearanceIcon(tint = it) },
                 onClick = { showAppearance = true },
             ),
             ProfileMenuEntry(
-                title = "Хранилище",
-                subtitle = "Кеш медиа и вложений",
+                title = tr("Хранилище", "Storage"),
+                subtitle = tr("Кеш медиа и вложений", "Media and attachment cache"),
                 icon = { ProfileMenuStorageIcon(tint = it) },
                 onClick = { showStorage = true },
             ),
             ProfileMenuEntry(
-                title = "Язык приложения",
-                trailing = "Русский",
+                title = tr("Язык приложения", "App language"),
+                trailing = selectedLanguage.displayName,
                 icon = { ProfileMenuGlobeIcon(tint = it) },
-                onClick = {},
+                onClick = { showLanguagePicker = true },
             ),
             ProfileMenuEntry(
-                title = "Обновления",
+                title = tr("Обновления", "Updates"),
                 badge = updateBadge.label,
                 badgeHighlight = updateBadge.highlight,
                 trailing = AppRuntimeInfo.versionName,
@@ -673,23 +664,54 @@ fun ProfileScreen(
                 onClick = { showAppUpdate = true },
             ),
         )
-    }
 
-    val supportItems = remember {
-        listOf(
+    val supportItems = listOf(
             ProfileMenuEntry(
-                title = "Помощь и поддержка",
+                title = tr("Помощь и поддержка", "Help and support"),
                 icon = { ProfileMenuHelpIcon(tint = it) },
                 onClick = { showSupport = true },
             ),
             ProfileMenuEntry(
-                title = "О приложении",
+                title = tr("О приложении", "About"),
                 icon = { ProfileMenuInfoIcon(tint = it) },
                 trailingContent = {
                     AboutGlagolitsaMark()
                 },
                 onClick = { showAboutApp = true },
             ),
+        )
+
+    if (showLanguagePicker) {
+        AlertDialog(
+            onDismissRequest = { showLanguagePicker = false },
+            title = { Text(tr("Язык приложения", "App language")) },
+            text = {
+                Column {
+                    AppLanguage.entries.forEach { language ->
+                        TextButton(
+                            onClick = {
+                                AppLanguageController.applyLanguage(language)
+                                showLanguagePicker = false
+                                scope.launch {
+                                    repository.saveProfileSetting(AppLanguage.SETTINGS_KEY, language.storageKey)
+                                }
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                        ) {
+                            Text(
+                                text = if (language == selectedLanguage) "✓ ${language.displayName}" else language.displayName,
+                                modifier = Modifier.fillMaxWidth(),
+                            )
+                        }
+                    }
+                }
+            },
+            confirmButton = {},
+            dismissButton = {
+                TextButton(onClick = { showLanguagePicker = false }) {
+                    Text(tr("Отмена", "Cancel"))
+                }
+            },
         )
     }
 
@@ -991,7 +1013,7 @@ fun ProfileScreen(
                 onAvatarClick = {
                     if (!avatarSaving) openAvatarPicker()
                 },
-                avatarHint = if (avatarSaving) "Сохраняем фото…" else null,
+                avatarHint = if (avatarSaving) tr("Сохраняем фото…", "Saving photo…") else null,
                 avatar = {
                     Box(contentAlignment = Alignment.Center) {
                         ProfileAvatar(
@@ -1042,7 +1064,11 @@ fun ProfileScreen(
             }
 
             PresenceVisibilityCard(
-                visibilityCaption = StatusChannels.profileNetworkVisibilityCaption(statusVisible),
+                visibilityCaption = if (statusVisible) {
+                    tr("Сетевой статус виден контактам", "Your online status is visible to contacts")
+                } else {
+                    tr("Сетевой статус скрыт от других", "Your online status is hidden")
+                },
                 visible = statusVisible,
                 loading = !presencePrivacyLoaded,
                 error = presencePrivacyError,
@@ -1084,20 +1110,20 @@ fun ProfileScreen(
             // After identity, before settings — all your channels.
             if (myChannelItems.isNotEmpty()) {
                 ProfileMenuCard(
-                    title = "Мои каналы",
+                    title = tr("Мои каналы", "My channels"),
                     items = myChannelItems,
                     compact = true,
                 )
             }
 
             ProfileMenuCard(
-                title = "Аккаунт и безопасность",
+                title = tr("Аккаунт и безопасность", "Account and security"),
                 items = accountItems,
                 layout = ProfileMenuLayout.IconGrid,
             )
-            ProfileMenuCard(title = "История", items = historyItems)
-            ProfileMenuCard(title = "Приложение", items = appItems)
-            ProfileMenuCard(title = "Поддержка", items = supportItems)
+            ProfileMenuCard(title = tr("История", "History"), items = historyItems)
+            ProfileMenuCard(title = tr("Приложение", "Application"), items = appItems)
+            ProfileMenuCard(title = tr("Поддержка", "Support"), items = supportItems)
         }
 
     }
@@ -1137,7 +1163,7 @@ private fun HeroProfileStatusField(
                 GlagolitsaInput(
                     value = statusDraft,
                     onValueChange = onValueChange,
-                    placeholder = "Короткая фраза",
+                    placeholder = tr("Короткая фраза", "Short status"),
                     size = GlagolitsaInputSize.Small,
                     variant = GlagolitsaInputVariant.Multiline,
                     singleLine = false,
@@ -1147,7 +1173,7 @@ private fun HeroProfileStatusField(
                 )
                 ProfileFieldSyncFooter(
                     syncLabel = when {
-                        saving -> "Сохраняем…"
+                        saving -> tr("Сохраняем…", "Saving…")
                         !error.isNullOrBlank() -> error
                         else -> ""
                     },
@@ -1172,9 +1198,9 @@ private fun HeroProfileStatusField(
                     .semantics {
                         role = Role.Button
                         contentDescription = if (isEmpty) {
-                            "Добавить короткую фразу"
+                            tr("Добавить короткую фразу", "Add a short status")
                         } else {
-                            "Редактировать короткую фразу"
+                            tr("Редактировать короткую фразу", "Edit short status")
                         }
                     }
                     .padding(horizontal = 12.dp, vertical = 6.dp),
@@ -1182,7 +1208,7 @@ private fun HeroProfileStatusField(
                 verticalArrangement = Arrangement.spacedBy(2.dp),
             ) {
                 Text(
-                    text = if (isEmpty) "Короткая фраза" else displayStatus,
+                    text = if (isEmpty) tr("Короткая фраза", "Short status") else displayStatus,
                     style = MaterialTheme.typography.bodySmall.copy(
                         fontStyle = if (isEmpty) FontStyle.Italic else FontStyle.Normal,
                         lineHeight = 18.sp,
@@ -1219,7 +1245,7 @@ private fun ProfileAboutCard(
             .padding(vertical = 2.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        ProfileSectionOrnamentHeader(title = "О себе")
+        ProfileSectionOrnamentHeader(title = tr("О себе", "About"))
         if (expanded) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
@@ -1228,7 +1254,7 @@ private fun ProfileAboutCard(
                 GlagolitsaInput(
                     value = aboutDraft,
                     onValueChange = onValueChange,
-                    placeholder = "Расскажите о себе",
+                    placeholder = tr("Расскажите о себе", "Tell people about yourself"),
                     size = GlagolitsaInputSize.Small,
                     variant = GlagolitsaInputVariant.Multiline,
                     singleLine = false,
@@ -1238,7 +1264,7 @@ private fun ProfileAboutCard(
                 )
                 ProfileFieldSyncFooter(
                     syncLabel = when {
-                        saving -> "Сохраняем…"
+                        saving -> tr("Сохраняем…", "Saving…")
                         !error.isNullOrBlank() -> error
                         else -> ""
                     },
@@ -1256,7 +1282,7 @@ private fun ProfileAboutCard(
             }
         } else {
             Text(
-                text = if (isEmpty) "Не указано" else about,
+                text = if (isEmpty) tr("Не указано", "Not specified") else about,
                 style = MaterialTheme.typography.bodyMedium.copy(
                     fontStyle = if (isEmpty) FontStyle.Italic else FontStyle.Normal,
                 ),
@@ -1273,9 +1299,9 @@ private fun ProfileAboutCard(
                     .semantics {
                         role = Role.Button
                         contentDescription = if (isEmpty) {
-                            "Добавить информацию о себе"
+                            tr("Добавить информацию о себе", "Add information about yourself")
                         } else {
-                            "Редактировать информацию о себе"
+                            tr("Редактировать информацию о себе", "Edit information about yourself")
                         }
                     }
                     .padding(horizontal = 12.dp, vertical = 10.dp),
@@ -1378,7 +1404,7 @@ private fun ProfileFieldSyncFooter(
             }
             if (onCollapse != null) {
                 Text(
-                    text = "Свернуть",
+                    text = tr("Свернуть", "Collapse"),
                     style = MaterialTheme.typography.labelSmall,
                     color = GlagolitsaColors.TextTertiary,
                     modifier = Modifier.clickable(onClick = onCollapse),
@@ -1386,7 +1412,7 @@ private fun ProfileFieldSyncFooter(
             }
             if (showSave) {
                 Text(
-                    text = "Сохранить",
+                    text = tr("Сохранить", "Save"),
                     style = MaterialTheme.typography.labelSmall,
                     color = GlagolitsaColors.OrnamentGold,
                     fontWeight = FontWeight.SemiBold,
@@ -1430,7 +1456,7 @@ private fun PresenceVisibilityCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Сетевой статус",
+                        text = tr("Сетевой статус", "Online status"),
                         style = MaterialTheme.typography.bodyMedium,
                         color = GlagolitsaColors.TextPrimary,
                         fontWeight = FontWeight.SemiBold,
@@ -1488,7 +1514,7 @@ private fun BiometricUnlockCard(
             ) {
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
-                        text = "Вход по отпечатку",
+                        text = tr("Вход по отпечатку", "Fingerprint sign-in"),
                         style = MaterialTheme.typography.bodyMedium,
                         color = GlagolitsaColors.TextPrimary,
                         fontWeight = FontWeight.SemiBold,
@@ -1519,19 +1545,19 @@ private fun BiometricUnlockCard(
 
 private fun biometricSettingCaption(enabled: Boolean, availability: LocalAuthAvailability): String =
     when {
-        enabled -> "Сохраненная сессия откроется после отпечатка"
-        availability == LocalAuthAvailability.Available -> "Включите для этого аккаунта"
+        enabled -> tr("Сохраненная сессия откроется после отпечатка", "Your saved session will open after fingerprint verification")
+        availability == LocalAuthAvailability.Available -> tr("Включите для этого аккаунта", "Enable for this account")
         else -> biometricUnavailableMessage(availability)
     }
 
 private fun biometricUnavailableMessage(availability: LocalAuthAvailability): String =
     when (availability) {
-        LocalAuthAvailability.NoBiometricEnrolled -> "Добавьте отпечаток в настройках телефона"
-        LocalAuthAvailability.Unsupported -> "На этом устройстве отпечаток недоступен"
-        LocalAuthAvailability.HardwareUnavailable -> "Датчик отпечатка временно недоступен"
-        LocalAuthAvailability.SecurityUpdateRequired -> "Требуется обновление безопасности"
-        LocalAuthAvailability.Unknown -> "Статус датчика не определен"
-        LocalAuthAvailability.Available -> "Доступно"
+        LocalAuthAvailability.NoBiometricEnrolled -> tr("Добавьте отпечаток в настройках телефона", "Add a fingerprint in your device settings")
+        LocalAuthAvailability.Unsupported -> tr("На этом устройстве отпечаток недоступен", "Fingerprint authentication is unavailable on this device")
+        LocalAuthAvailability.HardwareUnavailable -> tr("Датчик отпечатка временно недоступен", "The fingerprint sensor is temporarily unavailable")
+        LocalAuthAvailability.SecurityUpdateRequired -> tr("Требуется обновление безопасности", "A security update is required")
+        LocalAuthAvailability.Unknown -> tr("Статус датчика не определен", "Fingerprint status is unknown")
+        LocalAuthAvailability.Available -> tr("Доступно", "Available")
     }
 
 @Composable
@@ -1777,7 +1803,7 @@ private fun DevicesScreen(
                 devices = ownDevices.devices
             }
             .onFailure {
-                error = it.message ?: "Не удалось загрузить устройства"
+                error = it.message ?: tr("Не удалось загрузить устройства", "Failed to load devices")
             }
         loading = false
     }
@@ -1795,11 +1821,13 @@ private fun DevicesScreen(
         verticalArrangement = Arrangement.spacedBy(GlagolitsaSpacing.lg),
     ) {
         AppTopBar(
-            title = "Устройства",
-            subtitle = if (!loading && error == null) "Активных: $activeCount из ${devices.size}" else null,
+            title = tr("Устройства", "Devices"),
+            subtitle = if (!loading && error == null) {
+                tr("Активных: $activeCount из ${devices.size}", "Active: $activeCount of ${devices.size}")
+            } else null,
             actions = {
-                AppTopBarTextAction(text = "Обновить", onClick = { refreshTick += 1 })
-                AppTopBarTextAction(text = "Назад", onClick = onBack)
+                AppTopBarTextAction(text = tr("Обновить", "Refresh"), onClick = { refreshTick += 1 })
+                AppTopBarTextAction(text = tr("Назад", "Back"), onClick = onBack)
             },
         )
 
@@ -1824,16 +1852,22 @@ private fun DevicesScreen(
         ) {
             if (error != null) {
                 DevicesStateCard(
-                    title = "Не удалось загрузить список",
-                    message = error ?: "Проверьте подключение и попробуйте снова.",
-                    actionText = "Повторить",
+                    title = tr("Не удалось загрузить список", "Failed to load devices"),
+                    message = error ?: tr(
+                        "Проверьте подключение и попробуйте снова.",
+                        "Check your connection and try again.",
+                    ),
+                    actionText = tr("Повторить", "Retry"),
                     onAction = { refreshTick += 1 },
                 )
             } else if (devices.isEmpty()) {
                 DevicesStateCard(
-                    title = "Устройств пока нет",
-                    message = "После регистрации текущего телефона он появится в этом списке.",
-                    actionText = "Обновить",
+                    title = tr("Устройств пока нет", "No devices yet"),
+                    message = tr(
+                        "После регистрации текущего телефона он появится в этом списке.",
+                        "Your current phone will appear here after it is registered.",
+                    ),
+                    actionText = tr("Обновить", "Refresh"),
                     onAction = { refreshTick += 1 },
                 )
             } else {
@@ -1914,15 +1948,15 @@ private fun DevicesSummaryCard(
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(
-                text = "Список устройств",
+                text = tr("Список устройств", "Device list"),
                 style = MaterialTheme.typography.titleSmall,
                 color = GlagolitsaColors.TextSecondary,
                 fontWeight = FontWeight.SemiBold,
             )
-            AboutInfoRow(label = "Активные", value = activeCount.toString())
-            AboutInfoRow(label = "Всего", value = totalCount.toString())
+            AboutInfoRow(label = tr("Активные", "Active"), value = activeCount.toString())
+            AboutInfoRow(label = tr("Всего", "Total"), value = totalCount.toString())
             AboutInfoRow(
-                label = "Это устройство",
+                label = tr("Это устройство", "This device"),
                 value = currentDeviceId?.shortDeviceValue() ?: "-",
             )
         }
@@ -1982,7 +2016,11 @@ private fun DeviceRow(
             }
             Column(modifier = Modifier.weight(1f)) {
                 Text(
-                    text = if (isCurrent) "Это устройство" else "Устройство ${device.device_id.shortDeviceValue()}",
+                    text = if (isCurrent) {
+                        tr("Это устройство", "This device")
+                    } else {
+                        tr("Устройство", "Device") + " ${device.device_id.shortDeviceValue()}"
+                    },
                     style = MaterialTheme.typography.bodyLarge,
                     color = GlagolitsaColors.TextPrimary,
                     fontWeight = FontWeight.SemiBold,
@@ -2016,9 +2054,9 @@ private fun DeviceStatusChip(status: String?) {
         else -> GlagolitsaColors.TextTertiary
     }
     val label = when (normalized) {
-        "active" -> "Активно"
-        "pending" -> "Ожидает"
-        "revoked" -> "Отозвано"
+        "active" -> tr("Активно", "Active")
+        "pending" -> tr("Ожидает", "Pending")
+        "revoked" -> tr("Отозвано", "Revoked")
         else -> normalized
     }
     Box(
@@ -2300,7 +2338,7 @@ private fun AboutGlagolitsaMark() {
             )
         }
         Text(
-            text = "Глаголица",
+            text = tr("Глаголица", "Glagolitsa"),
             style = MaterialTheme.typography.labelMedium,
             color = GlagolitsaColors.TextTertiary,
         )
@@ -2330,16 +2368,16 @@ private fun AboutAppInfoCard() {
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
             Text(
-                text = "О приложении",
+                text = tr("О приложении", "About"),
                 style = MaterialTheme.typography.titleSmall,
                 color = GlagolitsaColors.TextSecondary,
                 fontWeight = FontWeight.SemiBold,
             )
-            AboutInfoRow(label = "Название", value = "Глаголица")
-            AboutInfoRow(label = "Версия", value = versionLabel)
-            AboutInfoRow(label = "Платформа", value = aboutPlatformLabel(AppRuntimeInfo.platform))
-            AboutInfoRow(label = "Шифрование", value = aboutEncryptionLabel(AppRuntimeInfo.platform))
-            AboutInfoRow(label = "Поддержка", value = AboutAppSupportEmail)
+            AboutInfoRow(label = tr("Название", "Name"), value = tr("Глаголица", "Glagolitsa"))
+            AboutInfoRow(label = tr("Версия", "Version"), value = versionLabel)
+            AboutInfoRow(label = tr("Платформа", "Platform"), value = aboutPlatformLabel(AppRuntimeInfo.platform))
+            AboutInfoRow(label = tr("Шифрование", "Encryption"), value = aboutEncryptionLabel(AppRuntimeInfo.platform))
+            AboutInfoRow(label = tr("Поддержка", "Support"), value = AboutAppSupportEmail)
             HorizontalDivider(color = GlagolitsaColors.DividerSubtle)
             Text(
                 text = "© 2026 Svetlana Zavatskaia",
@@ -2347,7 +2385,7 @@ private fun AboutAppInfoCard() {
                 color = GlagolitsaColors.TextTertiary,
             )
             Text(
-                text = "Глаголица · github.com/LanaZet/glagolitsa-mobile",
+                text = "Glagolitsa · github.com/LanaZet/glagolitsa-mobile",
                 style = MaterialTheme.typography.labelSmall,
                 color = GlagolitsaColors.TextTertiary,
             )
@@ -2366,10 +2404,10 @@ private fun aboutPlatformLabel(platform: ClientPlatform): String =
 
 private fun aboutEncryptionLabel(platform: ClientPlatform): String =
     when (platform) {
-        ClientPlatform.ANDROID -> "Сквозное (Signal Protocol)"
+        ClientPlatform.ANDROID -> tr("Сквозное (Signal Protocol)", "End-to-end (Signal Protocol)")
         // iOS/desktop crypto is still catching up — don't over-claim full Signal parity.
-        ClientPlatform.IOS -> "Сквозное (в развитии)"
-        ClientPlatform.DESKTOP -> "Сквозное (в развитии)"
+        ClientPlatform.IOS -> tr("Сквозное (в развитии)", "End-to-end (in development)")
+        ClientPlatform.DESKTOP -> tr("Сквозное (в развитии)", "End-to-end (in development)")
     }
 
 @Composable
@@ -2386,9 +2424,9 @@ private fun AboutAppScreen(
         verticalArrangement = Arrangement.spacedBy(GlagolitsaSpacing.lg),
     ) {
         AppTopBar(
-            title = "О приложении",
+            title = tr("О приложении", "About"),
             actions = {
-                AppTopBarTextAction(text = "Назад", onClick = onBack)
+                AppTopBarTextAction(text = tr("Назад", "Back"), onClick = onBack)
             },
         )
 
@@ -2482,11 +2520,11 @@ private fun ProfileTopBar(
     onLogout: () -> Unit,
 ) {
     AppTopBar(
-        title = "Профиль",
+        title = tr("Профиль", "Profile"),
         modifier = Modifier.padding(bottom = GlagolitsaSpacing.lg),
         actions = {
             AppTopBarTextAction(
-                text = if (logoutLoading) "Выходим…" else "Выйти",
+                text = if (logoutLoading) tr("Выходим…", "Signing out…") else tr("Выйти", "Sign out"),
                 onClick = onLogout,
                 enabled = !logoutLoading,
                 color = GlagolitsaColors.AccentRed,

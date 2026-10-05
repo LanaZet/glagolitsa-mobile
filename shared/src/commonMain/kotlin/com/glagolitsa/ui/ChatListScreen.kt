@@ -4,6 +4,7 @@
 @file:OptIn(androidx.compose.foundation.ExperimentalFoundationApi::class)
 
 package com.glagolitsa.ui
+
 import kotlin.math.PI
 
 import androidx.compose.foundation.Canvas
@@ -97,6 +98,7 @@ import com.glagolitsa.ui.chat.ChatListSwipeDeletePolicy
 import com.glagolitsa.ui.chat.ConversationRemoveConfirmDialog
 import com.glagolitsa.ui.chat.ConversationIconEditor
 import com.glagolitsa.ui.layout.ChatLayout
+import com.glagolitsa.ui.i18n.tr
 import com.glagolitsa.ui.profile.ProfileAvatar
 import com.glagolitsa.ui.profile.presenceRingColor
 import com.glagolitsa.ui.theme.GlagolitsaColors
@@ -174,24 +176,20 @@ fun ChatListScreen(
     var chatPendingDelete by remember { mutableStateOf<Chat?>(null) }
     var listActionError by remember { mutableStateOf<String?>(null) }
 
-    val quickFilters = remember {
-        listOf(
-            ChatListFilter.Unread to "Непроч.",
-            ChatListFilter.Personal to "Личные",
-            ChatListFilter.Groups to "Группы",
-            ChatListFilter.Channels to "Каналы",
-        )
-    }
-    val filterMenuItems = remember {
-        listOf(
-            ChatFilterMenuItem(ChatListFilter.All, "Все сообщения"),
-            ChatFilterMenuItem(ChatListFilter.KnownSenders, "Известные отправители"),
-            ChatFilterMenuItem(null, "Неизвестные отправители", enabled = false),
-            ChatFilterMenuItem(ChatListFilter.Blocked, "Заблокированные"),
-            ChatFilterMenuItem(null, "Спам", enabled = false),
-            ChatFilterMenuItem(null, "Недавно удаленные", enabled = false),
-        )
-    }
+    val quickFilters = listOf(
+        ChatListFilter.Unread to tr("Непроч.", "Unread"),
+        ChatListFilter.Personal to tr("Личные", "Direct"),
+        ChatListFilter.Groups to tr("Группы", "Groups"),
+        ChatListFilter.Channels to tr("Каналы", "Channels"),
+    )
+    val filterMenuItems = listOf(
+        ChatFilterMenuItem(ChatListFilter.All, tr("Все сообщения", "All messages")),
+        ChatFilterMenuItem(ChatListFilter.KnownSenders, tr("Известные отправители", "Known senders")),
+        ChatFilterMenuItem(null, tr("Неизвестные отправители", "Unknown senders"), enabled = false),
+        ChatFilterMenuItem(ChatListFilter.Blocked, tr("Заблокированные", "Blocked")),
+        ChatFilterMenuItem(null, tr("Спам", "Spam"), enabled = false),
+        ChatFilterMenuItem(null, tr("Недавно удаленные", "Recently deleted"), enabled = false),
+    )
 
     LaunchedEffect(repository) {
         syncing = true
@@ -359,7 +357,7 @@ fun ChatListScreen(
                 ChatSearchField(
                     value = searchQuery,
                     onValueChange = { searchQuery = it },
-                    placeholder = if (peopleSearchMode) "Найти @username" else "Поиск чатов и людей",
+                    placeholder = if (peopleSearchMode) tr("Найти @username", "Find @username") else tr("Поиск чатов и людей", "Search chats and people"),
                     filterMenuItems = filterMenuItems,
                     selectedFilter = selectedFilter,
                     onFilterSelected = { selectedFilter = it },
@@ -436,7 +434,7 @@ fun ChatListScreen(
                         if (visibleChats.isNotEmpty()) {
                             if (searchQuery.isNotBlank()) {
                                 item(key = "section-chats") {
-                                    SearchSectionHeader(title = "Чаты")
+                                    SearchSectionHeader(title = tr("Чаты", "Chats"))
                                 }
                             }
                             items(
@@ -1169,7 +1167,7 @@ private fun ChatListHeader(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = "Чаты",
+            text = tr("Чаты", "Chats"),
             style = MaterialTheme.typography.headlineSmall,
             color = GlagolitsaColors.TextPrimary,
             fontWeight = FontWeight.SemiBold,
@@ -1186,7 +1184,7 @@ private fun ChatListHeader(
                     .clickable { onCreateMenuExpandedChange(true) }
                     .semantics {
                         role = Role.Button
-                        contentDescription = "Создать"
+                        contentDescription = tr("Создать", "Create")
                     }
                     .padding(horizontal = 10.dp, vertical = 6.dp)
                     .testTag("chat-list-create"),
@@ -1203,15 +1201,15 @@ private fun ChatListHeader(
                 modifier = Modifier.background(GlagolitsaColors.SurfaceFloating),
             ) {
                 DropdownMenuItem(
-                    text = { Text("Новая группа", color = GlagolitsaColors.TextPrimary) },
+                    text = { Text(tr("Новая группа", "New group"), color = GlagolitsaColors.TextPrimary) },
                     onClick = onCreateGroup,
                 )
                 DropdownMenuItem(
-                    text = { Text("Новый канал", color = GlagolitsaColors.TextPrimary) },
+                    text = { Text(tr("Новый канал", "New channel"), color = GlagolitsaColors.TextPrimary) },
                     onClick = onCreateChannel,
                 )
                 DropdownMenuItem(
-                    text = { Text("Вступить по ссылке", color = GlagolitsaColors.TextPrimary) },
+                    text = { Text(tr("Вступить по ссылке", "Join via link"), color = GlagolitsaColors.TextPrimary) },
                     onClick = onJoinByLink,
                 )
             }
@@ -1331,7 +1329,7 @@ private fun ChatListRow(
     onClick: () -> Unit,
     onDeleteRequest: () -> Unit,
 ) {
-    val preview = chat.last_message?.takeIf { it.isNotBlank() } ?: "Пока нет сообщений"
+    val preview = chat.last_message?.takeIf { it.isNotBlank() } ?: tr("Пока нет сообщений", "No messages yet")
     val timeLabel = formatMessageTime(chat.last_message_at ?: chat.created_at)
     val hasUnread = unreadCount > 0
     val density = LocalDensity.current

@@ -31,7 +31,7 @@ class AuthMessagesTest {
     fun authRegistrationMessage_mapsConnectionFailure() {
         val message = Exception("Failed to connect to /10.0.2.2:8080").authRegistrationMessage()
         assertTrue(message.contains("Не удалось подключиться к серверу"))
-        assertTrue(message.contains("VPN"))
+        assertTrue(message.contains("сервер запущен"))
     }
 
     @Test

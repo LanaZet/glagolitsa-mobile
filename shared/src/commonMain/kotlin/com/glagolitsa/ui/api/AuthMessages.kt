@@ -29,7 +29,7 @@ private fun Throwable.isNetworkFailure(): Boolean {
 }
 
 private fun Throwable.networkFailureMessage(): String =
-    "Не удалось подключиться к серверу. Включите Red Shield VPN (глобальный режим, не «Обход БС») или проверьте интернет."
+    "Не удалось подключиться к серверу. Проверьте, что выбранный сервер запущен и доступен с этого устройства."
 
 private fun deviceRegistrationMessage(): String =
     "Аккаунт создан, но устройство не зарегистрировано на сервере. " +

@@ -62,7 +62,7 @@ func SeedDevData(s Store) {
 
 	chat := model.Chat{
 		ID:        uuid.NewString(),
-		Title:     "Тестовый чат",
+		Title:     "Demo chat",
 		Type:      model.ChatTypeGroup,
 		MemberIDs: []string{devUser.ID},
 		CreatedAt: NowUTC(),
@@ -76,7 +76,7 @@ func SeedDevData(s Store) {
 		ID:        uuid.NewString(),
 		ChatID:    chat.ID,
 		SenderID:  devUser.ID,
-		Body:      "Добро пожаловать в Glagolitsa! Это тестовое сообщение.",
+		Body:      "Welcome to Glagolitsa! This is a demo message.",
 		CreatedAt: NowUTC(),
 	}
 	if _, err := s.AddMessage(message); err != nil {

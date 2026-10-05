@@ -154,9 +154,9 @@ android {
         minSdk = libs.versions.minSdk.get().toInt()
         // Prefer root -P flags (assemble from androidApp still sees rootProject properties).
         fun prop(name: String): String? =
-            localBuildProps.getProperty(name)?.takeIf { it.isNotBlank() }
+            (rootProject.findProperty(name) as String?)
                 ?: (project.findProperty(name) as String?)
-                ?: (rootProject.findProperty(name) as String?)
+                ?: localBuildProps.getProperty(name)?.takeIf { it.isNotBlank() }
 
         val apiBaseUrl = prop("apiBaseUrl") ?: ""
         val apiFallbackIp = prop("apiFallbackIp") ?: ""

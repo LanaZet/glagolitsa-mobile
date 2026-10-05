@@ -48,6 +48,7 @@ import com.glagolitsa.session.SessionStore
 import com.glagolitsa.ui.components.AppEmptyState
 import com.glagolitsa.ui.components.AppTopBar
 import com.glagolitsa.ui.components.AppTopBarTextAction
+import com.glagolitsa.ui.i18n.tr
 import com.glagolitsa.ui.profile.ProfileAvatar
 import com.glagolitsa.ui.theme.GlagolitsaColors
 
@@ -84,10 +85,10 @@ fun CallsScreen(
             .padding(top = 12.dp, bottom = bottomContentPadding),
     ) {
         AppTopBar(
-            title = "Звонки",
+            title = tr("Звонки", "Calls"),
             modifier = Modifier.padding(bottom = 12.dp),
             actions = {
-                AppTopBarTextAction(text = "Назад", onClick = onBack)
+                AppTopBarTextAction(text = tr("Назад", "Back"), onClick = onBack)
             },
         )
 
@@ -109,8 +110,11 @@ fun CallsScreen(
                 contentAlignment = Alignment.Center,
             ) {
                 AppEmptyState(
-                    title = "История звонков пуста",
-                    message = "Входящие и исходящие звонки появятся здесь.",
+                    title = tr("История звонков пуста", "No call history yet"),
+                    message = tr(
+                        "Входящие и исходящие звонки появятся здесь.",
+                        "Incoming and outgoing calls will appear here.",
+                    ),
                 )
             }
 
@@ -121,7 +125,8 @@ fun CallsScreen(
                 items(history, key = { it.id }) { call ->
                     val selfId = user?.id
                     val partnerId = selfId?.let { call.partnerIdFor(it) }
-                    val partnerName = partnerId?.let { repository.usernameForSender(it) } ?: "Контакт"
+                    val partnerName = partnerId?.let { repository.usernameForSender(it) }
+                        ?: tr("Контакт", "Contact")
                     val partnerAvatarUrl = partnerId?.let { knownUserProfiles[it]?.avatar_url ?: repository.avatarUrlForUser(it) }
                     val isIncomingRinging =
                         call.status == CallStatus.RINGING && call.callee_id == selfId
@@ -165,7 +170,10 @@ private fun CallHistoryRow(
             )
             .semantics {
                 role = Role.Button
-                contentDescription = "Открыть звонок с $partnerName: $details"
+                contentDescription = tr(
+                    "Открыть звонок с $partnerName: $details",
+                    "Open call with $partnerName: $details",
+                )
             }
             .padding(horizontal = 14.dp, vertical = 12.dp),
         verticalAlignment = Alignment.CenterVertically,

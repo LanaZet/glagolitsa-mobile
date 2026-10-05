@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +30,9 @@ import com.glagolitsa.ui.components.nav.VisibleMainTabs
 import com.glagolitsa.ui.components.rememberNavigationBarInset
 import com.glagolitsa.ui.components.systemNavigationBarSafeArea
 import com.glagolitsa.ui.components.topSafeArea
+import com.glagolitsa.ui.i18n.AppLanguage
+import com.glagolitsa.ui.i18n.AppLanguageController
+import com.glagolitsa.ui.i18n.tr
 import com.glagolitsa.ui.navigation.MainTab
 import com.glagolitsa.ui.theme.GlagolitsaColors
 
@@ -53,6 +57,14 @@ fun MainScreen(
     val unreadCounts by repository.unreadCounts.collectAsState()
     val unreadChatsCount = unreadCounts.count { it.value > 0 }
     val bottomContentPadding = BottomNavReservedHeight + rememberNavigationBarInset()
+
+    LaunchedEffect(repository) {
+        AppLanguageController.applyLanguage(
+            AppLanguage.fromStorage(
+                repository.loadProfileSetting(AppLanguage.SETTINGS_KEY, AppLanguage.Russian.storageKey),
+            ),
+        )
+    }
 
     AppBackHandler(enabled = selectedTab != MainTab.Chats) {
         selectedTab = MainTab.Chats
@@ -85,7 +97,7 @@ fun MainScreen(
                     )
 
                     MainTab.Contacts -> PlaceholderTab(
-                        title = "Контакты",
+                        title = tr("Контакты", "Contacts"),
                         bottomContentPadding = bottomContentPadding,
                     )
 

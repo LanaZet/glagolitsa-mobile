@@ -3,6 +3,8 @@
 
 package com.glagolitsa.ui.navigation
 
+import com.glagolitsa.ui.i18n.tr
+
 enum class MainTab {
     Chats,
     Contacts,
@@ -12,10 +14,10 @@ enum class MainTab {
 
     val label: String
         get() = when (this) {
-            Chats -> "Чаты"
-            Contacts -> "Контакты"
-            Calls -> "Звонки"
-            Settings -> "Настройки"
+            Chats -> tr("Чаты", "Chats")
+            Contacts -> tr("Контакты", "Contacts")
+            Calls -> tr("Звонки", "Calls")
+            Settings -> tr("Настройки", "Settings")
         }
 
     companion object {
