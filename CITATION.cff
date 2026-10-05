@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use or reference Glagolitsa, please cite this repository."
+title: "Glagolitsa"
+type: software
+version: 0.1.0
+date-released: "2026-10-06"
+authors:
+  - family-names: "Zavatskaia"
+    given-names: "Svetlana"
+    alias: "LanaZet"
+repository-code: "https://github.com/LanaZet/glagolitsa-mobile"
+url: "https://github.com/LanaZet/glagolitsa-mobile"
+license: "LicenseRef-Glagolitsa-Source-Available"
+license-url: "https://github.com/LanaZet/glagolitsa-mobile/blob/main/LICENSE"
+abstract: >-
+  An independently developed cross-platform messenger with Kotlin
+  Multiplatform clients and a self-hosted Go backend.
