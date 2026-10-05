@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use or reference Glagolitsa, please cite this repository."
 title: "Glagolitsa"
 type: software
-version: 0.1.0
+version: 0.1.1
 date-released: "2026-10-06"
 authors:
   - family-names: "Zavatskaia"
