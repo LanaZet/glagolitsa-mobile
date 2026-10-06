@@ -2,7 +2,7 @@
 
 [English](README.md) · [Русский](README.ru.md)
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23186436.svg)](https://doi.org/10.5281/zenodo.23186436)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23186435.svg)](https://doi.org/10.5281/zenodo.23186435)
 
 Мессенджер для переписки и звонков, в том числе на дальние расстояния. Клиенты на Android, iOS и desktop, сервер на Go — в этом же репозитории.
 
