@@ -2,6 +2,8 @@
 
 [English](README.md) · [Русский](README.ru.md)
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.23186436.svg)](https://doi.org/10.5281/zenodo.23186436)
+
 Glagolitsa is an independently developed cross-platform messenger for private messaging, groups, channels, and voice calls. The repository contains Android, iOS, and desktop clients alongside a self-hosted Go backend.
 
 The project is under active development. Android currently has the most complete feature set; iOS and desktop support are progressing. The implementation, architecture, deployment tooling, and automated tests are published here as an engineering portfolio project.
