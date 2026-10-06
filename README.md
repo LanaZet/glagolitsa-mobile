@@ -143,6 +143,8 @@ Documentation index: **[docs/README.md](docs/README.md)**
 
 ## Author
 
-Glagolitsa is designed and developed by **Svetlana Zavatskaia** as an independent engineering project spanning mobile clients, backend services, applied cryptography, real-time communications, deployment, and test automation.
+Glagolitsa is an independent engineering project by **Svetlana Zavatskaia**, created to explore cross-platform mobile architecture, secure messaging, real-time communications, backend services, deployment, and test automation.
 
-I am open to conversations about mobile, Kotlin Multiplatform, and backend engineering opportunities.
+My professional background includes JavaScript, C#, and cross-platform mobile development. Through Glagolitsa, I am expanding my experience with Kotlin Multiplatform, Compose Multiplatform, and Go.
+
+I am interested in international collaboration and opportunities involving JavaScript, C#, mobile development, and cross-platform applications.
